@@ -1,0 +1,113 @@
+<template>
+  <teleport to="body">
+    <div v-if="ifShow" @click="tryClose" class="backdrop"></div>
+    <transition name="dialog">
+      <dialog open v-if="ifShow">
+        <header>
+          <slot name="header">
+            <h2>{{ text }}</h2>
+          </slot>
+        </header>
+        <menu>
+          <base-button @click="tryClose">Close</base-button>
+        </menu>
+      </dialog>
+    </transition>
+  </teleport>
+</template>
+
+<script>
+import { ref, watch } from "vue";
+export default {
+  props: ["show", "title"],
+  setup(props,  context ) {
+    const ifShow = ref(props.show);
+    const text = ref(props.title);
+    function tryClose() {
+      context.emit("update:show", false);
+    }
+
+    watch(() => props.show, (newVal) => {
+      ifShow.value = newVal;
+    });
+    return { ifShow, text, tryClose };
+  },
+};
+</script>
+
+<style scoped>
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 10;
+}
+
+dialog {
+  position: fixed;
+  top: 20vh;
+  left: 10%;
+  width: 80%;
+  z-index: 100;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+header {
+  background-color: #3a0061;
+  color: white;
+  width: 100%;
+  padding: 1rem;
+}
+
+header h2 {
+  margin: 0 auto;
+  text-align: center;
+}
+
+section {
+  padding: 1rem;
+}
+
+menu {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.dialog-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.dialog-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.dialog-enter-to,
+.dialog-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (min-width: 768px) {
+  dialog {
+    left: calc(50% - 20rem);
+    width: 40rem;
+  }
+}
+</style>
