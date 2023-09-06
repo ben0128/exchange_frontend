@@ -1,9 +1,9 @@
 <template>
-  footer
+  sidebar
 </template>
 
 <script>
 export default {
-  // name: "TheFooter",
+  // name: "SideBar",
 };
 </script>

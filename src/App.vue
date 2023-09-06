@@ -1,17 +1,26 @@
 <template>
-  <router-view></router-view>
+    <TheHeader v-if="!$route.meta.hideHeaderAndFooter" />
+    <SideBar v-if="!$route.meta.hideHeaderAndFooter" />
+    <router-view></router-view>
+    
+    <TheFooter v-if="!$route.meta.hideHeaderAndFooter" />
 </template>
 
 <script>
+import TheHeader from "./components/layout/TheHeader.vue";
+import TheFooter from "./components/layout/TheFooter.vue";
+import SideBar from "./components/layout/SideBar.vue";
 
 export default {
   components: {
-    
+    TheHeader,
+    TheFooter,
+    SideBar
   }
 }
 </script>
 
-<style>
+<!-- <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -20,4 +29,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
+</style> -->

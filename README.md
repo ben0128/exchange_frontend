@@ -1,4 +1,4 @@
-# my-vue-project
+# exchange_frontend
 
 ## Project setup
 ```
