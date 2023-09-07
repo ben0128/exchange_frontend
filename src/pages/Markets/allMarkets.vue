@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-container">
     <trading-widget id="chart_1"></trading-widget>
     <trading-widget id="chart_2"></trading-widget>
     <trading-widget id="chart_3"></trading-widget>
@@ -17,6 +17,4 @@ export default {
 </script>
 
 <style scoped>
-trading-widget {
-}
 </style>

@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import NotFound from "./pages/NotFound.vue";
 import allMarkets from "./pages/Markets/allMarkets.vue";
 // const allMarkets = () => import("./pages/Markets/allMarkets.vue");
+const userAccount = () => import("./pages/User/userAccount.vue");
 const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
 const taiwanMarket = () => import("./pages/Markets/taiwanMarket.vue");
@@ -14,27 +15,42 @@ const router = createRouter({
   routes: [
     { path: "/", redirect: "/markets/allMarkets" },
     {
-      path: "/",
+      path: "/markets",
       children: [
         {
-          path: "markets/allMarkets",
+          path: "allMarkets",
           component: allMarkets,
           meta: { name: "All Markets Index" },
         },
         {
-          path: "markets/cryptoMarket",
+          path: "cryptoMarket",
           component: cryptoMarket,
           meta: { name: "Crypto Market" },
         },
         {
-          path: "markets/usaMarket",
+          path: "usaMarket",
           component: usaMarket,
           meta: { name: "US Market" },
         },
         {
-          path: "markets/taiwanMarket",
+          path: "taiwanMarket",
           component: taiwanMarket,
           meta: { name: "Taiwan Market" },
+        },
+      ],
+    },
+    {
+      path: "/user",
+      children: [
+        {
+          path: "realAccount",
+          component: userAccount,
+          meta: { name: "RealAccount" },
+        },
+        {
+          path: "virtualAccount",
+          component: userAccount,
+          meta: { name: "VirtualAccount" },
         },
       ],
     },

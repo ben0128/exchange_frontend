@@ -7,7 +7,7 @@
       </a>
     </div>
     <!-- Sidebar -->
-    <div class="sidebar" >
+    <div class="sidebar">
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul
@@ -16,36 +16,27 @@
           role="menu"
         >
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+            <a href="#" class="nav-link active" @click="openMenu">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Starter Pages
-                <i class="right fas fa-angle-left"></i>
+                ACCOUNT OVERVIEW
+                <i class="right fas fa-angle-left" v-if="!isMenuOpen"></i>
+                <i class="right fas fa-angle-right" v-else></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" v-if="isMenuOpen">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
+                
+                <a href="/user/realAccount" class="nav-link">
+                  <i class="fa-solid fa-brazilian-real-sign fa-shake"></i><p>Real Account</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
+                <a href="/user/virtualAccount" class="nav-link">
+                  <i class="fa-solid fa-vr-cardboard fa-shake fa-sm"></i><p>Virtual Account</p>
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a
@@ -53,7 +44,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="nav-link"
-              >Contact Me!!</a
+              ><span class="fas fa-envelope"></span>Contact Me!!</a
             >
           </li>
         </ul>
@@ -66,12 +57,19 @@
 
 <script>
 import Logo from "../../assets/logo.jpg";
+import { ref } from "vue";
 
 export default {
   setup() {
     const logo = Logo;
+    const isMenuOpen = ref(false);
+    function openMenu() {
+      isMenuOpen.value = !isMenuOpen.value;
+    }
     return {
       logo,
+      isMenuOpen,
+      openMenu,
     };
   },
 };
@@ -89,6 +87,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.fa-envelope,
+.fa-brazilian-real-sign,
+.fa-vr-cardboard {
+  margin-right: 12px;
+  margin-left: 6px
 }
 
 </style>
