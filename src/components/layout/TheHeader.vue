@@ -23,10 +23,10 @@
           Markets
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <a class="dropdown-item" href="#">All Markets</a>
-          <a class="dropdown-item" href="#">US Markets</a>
-          <a class="dropdown-item" href="#">Taiwan Markets</a>
-          <a class="dropdown-item" href="#">Crypto Markets</a>
+          <router-link class="dropdown-item" to="/markets/allMarkets">All Markets</router-link>
+          <router-link class="dropdown-item" to="/markets/taiwanMarket">Taiwan Market</router-link>
+          <router-link class="dropdown-item" to="/markets/usaMarket">US Markets</router-link>
+          <router-link class="dropdown-item" to="/markets/cryptoMarket">Crypto Markets</router-link>
         </div>
       </li>
     </ul>
@@ -188,3 +188,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #333; /* 设置页脚的背景颜色 */
+  color: #fff; /* 设置文字颜色 */
+}
+</style>

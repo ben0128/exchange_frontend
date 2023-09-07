@@ -1,13 +1,22 @@
 <template>
-  <all-markets></all-markets>
+  <div>
+    <trading-widget id="chart_1"></trading-widget>
+    <trading-widget id="chart_2"></trading-widget>
+    <trading-widget id="chart_3"></trading-widget>
+  </div>
 </template>
 
 <script>
-import allMarkets from '../../components/charts/allMarketsChart.vue'
+import TradingWidget from "../../components/charts/allMarketsChart.vue";
 
 export default {
   components: {
-    allMarkets
-  }
-}
+    TradingWidget,
+  },
+};
 </script>
+
+<style scoped>
+trading-widget {
+}
+</style>

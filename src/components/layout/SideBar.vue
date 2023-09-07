@@ -3,16 +3,11 @@
     <!-- Brand Logo -->
     <div>
       <a href="#" class="brand-link">
-        <img
-          :src="logo"
-          alt=""
-          class="sidebar-logo"
-          style="opacity: 0.8"
-        />
+        <img :src="logo" alt="" class="sidebar-logo" style="opacity: 0.8" />
       </a>
     </div>
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" >
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul
@@ -53,7 +48,13 @@
             </a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="https://banwind.github.io/cv_and_sideprojects/" class="nav-link">Contact Me!!</a>
+            <a
+              href="https://banwind.github.io/cv_and_sideprojects/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-link"
+              >Contact Me!!</a
+            >
           </li>
         </ul>
       </nav>
@@ -89,6 +90,5 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
 
 </style>
