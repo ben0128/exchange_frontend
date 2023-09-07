@@ -15,28 +15,54 @@
           data-widget="treeview"
           role="menu"
         >
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active" @click="openMenu">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                ACCOUNT OVERVIEW
-                <i class="right fas fa-angle-left" v-if="!isMenuOpen"></i>
-                <i class="right fas fa-angle-right" v-else></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview" v-if="isMenuOpen">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">ACCOUNT OVERVIEW</h3>
+              <div class="card-tools">
+                <button
+                  type="button"
+                  class="btn btn-tool"
+                  data-card-widget="collapse"
+                >
+                  <i class="right fas fa-angle-down"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
               <li class="nav-item">
-                
                 <a href="/user/realAccount" class="nav-link">
-                  <i class="fa-solid fa-brazilian-real-sign fa-shake"></i><p>Real Account</p>
+                  <i class="fa-solid fa-brazilian-real-sign"></i>
+                  <p>Real Account</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/user/virtualAccount" class="nav-link">
-                  <i class="fa-solid fa-vr-cardboard fa-shake fa-sm"></i><p>Virtual Account</p>
+                  <i class="fa-solid fa-vr-cardboard fa-sm"></i>
+                  <p>Virtual Account</p>
                 </a>
               </li>
-            </ul>
+            </div>
+          </div>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a
+              href="/user/tradingJournal"
+              class="nav-link"
+              ><i class="fa-solid fa-book"></i>Trading Journal</a
+            >
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a
+              href="/user/favoriteAssets"
+              class="nav-link"
+              ><i class="fa-solid fa-heart"></i>Favorite Assets</a
+            >
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a
+              href="/user/userSetting"
+              class="nav-link"
+              ><i class="fa-solid fa-gear"></i>Settings</a
+            >
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a
@@ -57,19 +83,13 @@
 
 <script>
 import Logo from "../../assets/logo.jpg";
-import { ref } from "vue";
+// import { ref } from "vue";
 
 export default {
   setup() {
     const logo = Logo;
-    const isMenuOpen = ref(false);
-    function openMenu() {
-      isMenuOpen.value = !isMenuOpen.value;
-    }
     return {
       logo,
-      isMenuOpen,
-      openMenu,
     };
   },
 };
@@ -91,9 +111,21 @@ export default {
 
 .fa-envelope,
 .fa-brazilian-real-sign,
-.fa-vr-cardboard {
+.fa-vr-cardboard,
+.fa-book,
+.fa-gear,
+.fa-heart {
   margin-right: 12px;
-  margin-left: 6px
+  margin-left: 6px;
 }
 
+.card-header {
+  background-color: #504c4c;
+  color: #fff;
+}
+
+.card-body {
+  background-color: #504c4c;
+  color: #fff;
+}
 </style>

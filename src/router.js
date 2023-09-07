@@ -9,6 +9,9 @@ const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
 const taiwanMarket = () => import("./pages/Markets/taiwanMarket.vue");
 const UserAuth = () => import("./pages/Auth/UserAuth.vue");
+const tradingJournal = () => import("./pages/User/tradingJournal.vue");
+const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
+const userSetting = () => import("./pages/User/userSetting.vue");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,6 +55,21 @@ const router = createRouter({
           component: userAccount,
           meta: { name: "VirtualAccount" },
         },
+        {
+          path: "tradingJournal",
+          component: tradingJournal,
+          meta: { name: "TradingJournal" },
+        },
+        {
+          path: "favoriteAssets",
+          component: favoriteAssets,
+          meta: { name: "FavoriteAssets" },
+        },
+        {
+          path: "userSetting",
+          component: userSetting,
+          meta: { name: "UserSetting" },
+        }
       ],
     },
     { path: "/auth", component: UserAuth, meta: { hideHeaderAndFooter: true } },
