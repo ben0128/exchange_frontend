@@ -29,6 +29,9 @@
           <router-link class="dropdown-item" to="/markets/cryptoMarket">Crypto Markets</router-link>
         </div>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="/targets" class="nav-link">Find Target</a>
+      </li>
     </ul>
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">

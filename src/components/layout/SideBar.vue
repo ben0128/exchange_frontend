@@ -29,38 +29,33 @@
               </div>
             </div>
             <div class="card-body">
-              <li class="nav-item">
-                <a href="/user/realAccount" class="nav-link">
+              <li class="nav-item account" >
+                <a href="/user/realAccount" class="nav-link" id="real">
                   <i class="fa-solid fa-brazilian-real-sign"></i>
-                  <p>Real Account</p>
+                  <p class="account-desc">Real Account</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <p>_______________________________</p>
+              <li class="nav-item account">
                 <a href="/user/virtualAccount" class="nav-link">
                   <i class="fa-solid fa-vr-cardboard fa-sm"></i>
-                  <p>Virtual Account</p>
+                  <p class="account-desc">Virtual Account</p>
                 </a>
               </li>
             </div>
           </div>
           <li class="nav-item d-none d-sm-inline-block">
-            <a
-              href="/user/tradingJournal"
-              class="nav-link"
+            <a href="/user/tradingJournal" class="nav-link"
               ><i class="fa-solid fa-book"></i>Trading Journal</a
             >
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a
-              href="/user/favoriteAssets"
-              class="nav-link"
+            <a href="/user/favoriteAssets" class="nav-link"
               ><i class="fa-solid fa-heart"></i>Favorite Assets</a
             >
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a
-              href="/user/userSetting"
-              class="nav-link"
+            <a href="/user/userSetting" class="nav-link"
               ><i class="fa-solid fa-gear"></i>Settings</a
             >
           </li>
@@ -128,4 +123,24 @@ export default {
   background-color: #504c4c;
   color: #fff;
 }
+
+.account .nav-link {
+  padding: 0px;
+  margin-bottom: 20px;
+  border-top-color: #d61c1c;
+}
+
+.card-body {
+  padding-bottom: 0px;
+  ;
+}
+
+.account-desc {
+  font-size: 1.1rem;
+}
+
+#real {
+  margin: 0px 0px;
+}
+
 </style>

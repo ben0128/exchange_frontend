@@ -30,11 +30,26 @@
           <div class="content">
             <form @submit.prevent="submitForm">
               <div class="form-group">
-                <label for="buyType">Order Type</label>
+                <label for="buyType">Buy or Sell</label>
                 <select class="form-control" id="buyType">
-                  <option>Limit</option>
-                  <option>Market</option>
+                  <option>Buy</option>
+                  <option>Sell</option>
                 </select>
+              </div>
+              <div class="form-group btn-group">
+                <button
+                  v-for="type in buttonTypes"
+                  :key="type"
+                  type="button"
+                  class="btn"
+                  :class="{
+                    'btn-primary': activeButton === type,
+                    'btn-light': activeButton !== type,
+                  }"
+                  @click="changeActiveButton(type)"
+                >
+                  {{ type }}
+                </button>
               </div>
               <div class="form-group">
                 <label for="balance">Available Balance</label>
@@ -60,7 +75,7 @@
                     id="price"
                     min="0.01"
                     step="0.01"
-                    value="25907.40"
+                    value="0"
                   />
                   <div class="input-group-append">
                     <span class="input-group-text">USDT</span>
@@ -89,11 +104,11 @@
                     step="0.00001000"
                   />
                   <div class="input-group-append">
-                    <span class="input-group-text">BTC</span>
+                    <span class="input-group-text">{{ target.name }}</span>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary">Buy BTC</button>
+              <button type="submit" class="btn btn-primary">Buy</button>
             </form>
           </div>
         </div>
@@ -108,6 +123,8 @@ import tradingTarget from "../../components/charts/tradingTarget.vue";
 
 const searchQuery = ref("");
 const target = ref("");
+const activeButton = ref("Limit");
+const buttonTypes = ["Limit", "Market"];
 
 function searchStock(keyword) {
   target.value = "";
@@ -119,6 +136,10 @@ function searchStock(keyword) {
     target.value = "";
     searchQuery.value = "";
   }
+}
+
+function changeActiveButton(button) {
+  activeButton.value = button;
 }
 
 function submitForm() {
@@ -134,7 +155,6 @@ watch(searchQuery, (newTarget) => {
 </script>
 
 <style scoped>
-
 .search-container {
   display: flex;
   flex-direction: column;
@@ -161,6 +181,14 @@ watch(searchQuery, (newTarget) => {
   margin: auto auto;
 }
 
+.btn-group {
+  display: flex;
+  justify-content: space-evenly;
+}
+.btn {
+  margin: 0 0.5rem;
+  border-radius: 10px;
+}
 .content {
   width: 75%;
   max-width: 500px;
