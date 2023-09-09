@@ -12,6 +12,7 @@ const UserAuth = () => import("./pages/Auth/UserAuth.vue");
 const tradingJournal = () => import("./pages/User/tradingJournal.vue");
 const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
 const userSetting = () => import("./pages/User/userSetting.vue");
+const targetDetail = () => import("./pages/Targets/targetDetail.vue");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -69,8 +70,14 @@ const router = createRouter({
           path: "userSetting",
           component: userSetting,
           meta: { name: "UserSetting" },
-        }
+        },
       ],
+    },
+    {
+      path: "/targets",
+      component: targetDetail,
+      props: true,
+      meta: { name: "TargetDetail" },
     },
     { path: "/auth", component: UserAuth, meta: { hideHeaderAndFooter: true } },
     { path: "/:notFound(.*)", component: NotFound },
