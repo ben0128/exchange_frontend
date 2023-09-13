@@ -1,16 +1,23 @@
 {
   "name": "my-vue-project",
+  "homepage": "https://banwind.github.io/exchange_frontend",
   "version": "0.1.0",
+  "description": "A Vue.js project",
+  "main": "main.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "admin-lte": "^3.2.0",
     "core-js": "^3.8.3",
+    "gh-pages": "^6.0.0",
     "vue": "^3.2.13",
+    "vue-axios": "^3.5.2",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0"
   },

@@ -35,7 +35,7 @@
                   <p class="account-desc">Real Account</p>
                 </a>
               </li>
-              <p>_______________________________</p>
+              <p>_____________________________</p>
               <li class="nav-item account">
                 <a href="/user/virtualAccount" class="nav-link">
                   <i class="fa-solid fa-vr-cardboard fa-sm"></i>

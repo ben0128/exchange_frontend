@@ -69,6 +69,17 @@
               <div class="form-group">
                 <label for="price">Price</label>
                 <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">SHARES</span>
+                  </div>
+                  <input
+                  type="number"
+                    class="form-control"
+                    id="shares"
+                    min="1"
+                    step="1"
+                    value="0"
+                  />
                   <input
                     type="number"
                     class="form-control"
@@ -78,7 +89,7 @@
                     value="0"
                   />
                   <div class="input-group-append">
-                    <span class="input-group-text">USDT</span>
+                    <span class="input-group-text">USD</span>
                   </div>
                 </div>
               </div>
@@ -90,27 +101,109 @@
                   min="0"
                   max="100"
                   step="1"
+                  v-model="sliderValue"
                 />
-                <span id="sliderValue">0</span>
+                <span id="sliderValue">{{ sliderValue }}% Available Balance</span>
               </div>
-              <div class="form-group">
-                <label for="quantity">Quantity</label>
-                <div class="input-group">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="quantity"
-                    min="0.00001000"
-                    step="0.00001000"
-                  />
-                  <div class="input-group-append">
-                    <span class="input-group-text">{{ target.name }}</span>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary">Buy</button>
+              <button type="submit" class="btn btn-primary col-12">Buy</button>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 record">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Untraded Orders</h3>
+          <div class="card-tools">
+            <button
+              type="button"
+              class="btn btn-tool"
+              data-card-widget="collapse"
+              title="Collapse"
+            >
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0" style="height: 300px">
+          <table class="table table-head-fixed text-nowrap">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Target</th>
+                <th>Type</th>
+                <th>Shares</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>220</td>
+                <td>11-7-2014</td>
+                <td>TSLA</td>
+                <td><span class="badge bg-blue">Buy</span></td>
+                <td><span class="tag tag-success">91</span></td>
+                <td>1222 USD</td>
+              </tr>
+              <tr>
+                <td>242</td>
+                <td>11-7-2014</td>
+                <td>AAPL</td>
+                <td><span class="badge bg-danger">Sell</span></td>
+                <td><span class="tag tag-warning">50</span></td>
+                <td>4530 USD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Trade History</h3>
+          <div class="card-tools">
+            <button
+              type="button"
+              class="btn btn-tool"
+              data-card-widget="collapse"
+              title="Collapse"
+            >
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0" style="height: 300px">
+          <table class="table table-head-fixed text-nowrap">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Target</th>
+                <th>Type</th>
+                <th>Shares</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>183</td>
+                <td>11-7-2014</td>
+                <td>TSLA</td>
+                <td><span class="badge bg-blue">Buy</span></td>
+                <td><span class="tag tag-success">9</span></td>
+                <td>123 USD</td>
+              </tr>
+              <tr>
+                <td>219</td>
+                <td>11-7-2014</td>
+                <td>AAPL</td>
+                <td><span class="badge bg-danger">Sell</span></td>
+                <td><span class="tag tag-warning">5</span></td>
+                <td>453 USD</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -125,6 +218,8 @@ const searchQuery = ref("");
 const target = ref("");
 const activeButton = ref("Limit");
 const buttonTypes = ["Limit", "Market"];
+const sliderValue = ref(0);
+// const tradeType = ref("Buy");
 
 function searchStock(keyword) {
   target.value = "";
@@ -236,5 +331,9 @@ watch(searchQuery, (newTarget) => {
   font-size: 1rem; /* 字体大小 */
   color: #007bff; /* 文字颜色 */
   font-weight: bold;
+}
+
+.record {
+  margin-top: 1rem;
 }
 </style>

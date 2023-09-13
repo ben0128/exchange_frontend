@@ -6,7 +6,7 @@
 
 <script setup>
 import { onMounted, defineProps } from "vue";
-// import targetConfig from "../../../config/target.js";
+
 const props = defineProps(["target"]);
 const widgetId = "technical-analysis-chart-demo";
 onMounted(() => {
