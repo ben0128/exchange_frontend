@@ -1,7 +1,7 @@
 export default {
   colorTheme: "dark",
   dateRange: "3M",
-  showChart: false,
+  showChart: true,
   locale: "zh_TW",
   isTransparent: false,
   showSymbolLogo: true,

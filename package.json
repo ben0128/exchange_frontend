@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --no-modules-filenames",
+    "build": "vue-cli-service build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "vue-cli-service lint"
