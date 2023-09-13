@@ -61,7 +61,7 @@
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a
-              href="https://banwind.github.io/cv_and_sideprojects/"
+              href="https://ben0128.github.io/cv_and_sideprojects/"
               target="_blank"
               rel="noopener noreferrer"
               class="nav-link"
