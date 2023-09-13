@@ -71,15 +71,24 @@ const router = createRouter({
           component: userSetting,
           meta: { name: "UserSetting" },
         },
+        {
+          path: "userAuth",
+          component: UserAuth,
+          meta: { name: "UserAuth", hideHeaderAndFooter: true },
+        }
       ],
     },
     {
       path: "/targets",
-      component: targetDetail,
-      props: true,
-      meta: { name: "TargetDetail" },
+      children: [
+        {
+          path: ":target",
+          component: targetDetail,
+          props: true,
+          meta: { name: "TargetDetail" },
+        },
+      ],
     },
-    { path: "/auth", component: UserAuth, meta: { hideHeaderAndFooter: true } },
     { path: "/:notFound(.*)", component: NotFound },
   ],
 });

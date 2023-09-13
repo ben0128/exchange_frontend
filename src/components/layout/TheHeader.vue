@@ -30,7 +30,7 @@
         </div>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/targets" class="nav-link">Find Target</a>
+        <a href="/targets/target" class="nav-link">Find Target</a>
       </li>
     </ul>
     <!-- Right navbar links -->
