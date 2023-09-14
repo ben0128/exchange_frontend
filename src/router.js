@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 // import store from "./store/index.js";
 import NotFound from "./pages/NotFound.vue";
-import allMarkets from "./pages/Markets/allMarkets.vue";
-// const allMarkets = () => import("./pages/Markets/allMarkets.vue");
+const allMarkets = () => import("./pages/Markets/allMarkets.vue");
 const userAccount = () => import("./pages/User/userAccount.vue");
 const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
@@ -71,23 +70,17 @@ const router = createRouter({
           component: userSetting,
           meta: { name: "UserSetting" },
         },
-        {
-          path: "userAuth",
-          component: UserAuth,
-          meta: { name: "UserAuth", hideHeaderAndFooter: true },
-        }
       ],
     },
     {
       path: "/targets",
-      children: [
-        {
-          path: ":target",
-          component: targetDetail,
-          props: true,
-          meta: { name: "TargetDetail" },
-        },
-      ],
+      component: targetDetail,
+      meta: { name: "TargetDetail" },
+    },
+    {
+      path: "/auth",
+      component: UserAuth,
+      meta: { name: "UserAuth", hideHeaderAndFooter: true },
     },
     { path: "/:notFound(.*)", component: NotFound },
   ],
