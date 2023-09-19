@@ -3,7 +3,12 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button" @click="toggleSidebar"
+        <a
+          class="nav-link"
+          data-widget="pushmenu"
+          href="#"
+          role="button"
+          @click="toggleSidebar"
           ><i class="fas fa-bars"></i
         ></a>
       </li>
@@ -23,14 +28,22 @@
           Markets
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <router-link class="dropdown-item" to="/markets/allMarkets">All Markets</router-link>
-          <router-link class="dropdown-item" to="/markets/taiwanMarket">Taiwan Market</router-link>
-          <router-link class="dropdown-item" to="/markets/usaMarket">US Markets</router-link>
-          <router-link class="dropdown-item" to="/markets/cryptoMarket">Crypto Markets</router-link>
+          <router-link class="dropdown-item" to="/markets/allMarkets"
+            >All Markets</router-link
+          >
+          <router-link class="dropdown-item" to="/markets/taiwanMarket"
+            >Taiwan Market</router-link
+          >
+          <router-link class="dropdown-item" to="/markets/usaMarket"
+            >US Markets</router-link
+          >
+          <router-link class="dropdown-item" to="/markets/cryptoMarket"
+            >Crypto Markets</router-link
+          >
         </div>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/targets/target" class="nav-link">Find Target</a>
+        <a href="/targets" class="nav-link">Find Target</a>
       </li>
     </ul>
     <!-- Right navbar links -->
