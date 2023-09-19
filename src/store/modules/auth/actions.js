@@ -1,5 +1,4 @@
 const axios = require("axios");
-import { useRouter } from "vue-router";
 
 export default {
   login(context, payload) {
@@ -7,22 +6,27 @@ export default {
   },
   async signup(context, payload) {
     try {
-      const res = await axios.post("https://exchange-backend-kt8e.onrender.com/api/signup", {
-        email: payload.email,
-        password: payload.password,
-        checkPassword: payload.checkPassword,
-      });
+      const res = await axios.post(
+        "https://exchange-backend-kt8e.onrender.com/api/signup",
+        {
+          email: payload.email,
+          password: payload.password,
+          checkPassword: payload.checkPassword,
+        }
+      );
       if (res.status === 400) {
-        throw new Error(res.message);
+        throw new Error(res.data.message);
       }
       if (res.status === 200) {
-        console.log(res);
-        context.commit("setUserData", { email: payload.email, password: payload.password})
+        context.commit("setUserData", {
+          email: payload.email,
+          password: payload.password,
+        });
+        return { success: true, message: "註冊成功" };
       }
-      const router = useRouter();
-      router.push({ path: "/auth"})
     } catch (error) {
       console.log(error);
+      return { success: false, message: error.message };
     }
   },
 };

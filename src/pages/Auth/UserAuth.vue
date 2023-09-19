@@ -115,7 +115,7 @@ function changeBoxMode() {
   boxMode.value = !boxMode.value;
 }
 
-function submitForm() {
+async function submitForm() {
   if (mode.value === "Login") {
     alert("Login");
   } else if (mode.value === "Register") {
@@ -137,15 +137,26 @@ function submitForm() {
       return;
     }
 
-    store.dispatch("signup", {
+    const res = await store.dispatch("signup", {
       email: email.value,
       password: password.value,
       checkPassword: checkPassword.value,
     });
+    if (res.success) {
+      alert("註冊成功");
+      changeMode();
+    } else {
+      alert("註冊失敗");
+    }
   }
 }
 
 function changeMode() {
+  if (mode.value === "Login") {
+    email.value = "";
+    password.value = "";
+    checkPassword.value = "";
+  }
   mode.value = mode.value === "Login" ? "Register" : "Login";
 }
 
