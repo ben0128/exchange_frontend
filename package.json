@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "admin-lte": "^3.2.0",
+    "axios": "^1.5.0",
     "core-js": "^3.8.3",
+    "dotenv": "^16.3.1",
     "gh-pages": "^6.0.0",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",

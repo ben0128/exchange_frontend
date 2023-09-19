@@ -23,74 +23,65 @@ const router = createRouter({
         {
           path: "allMarkets",
           component: allMarkets,
-          meta: { name: "All Markets Index" },
         },
         {
           path: "cryptoMarket",
           component: cryptoMarket,
-          meta: { name: "Crypto Market" },
         },
         {
           path: "usaMarket",
           component: usaMarket,
-          meta: { name: "US Market" },
         },
         {
           path: "taiwanMarket",
           component: taiwanMarket,
-          meta: { name: "Taiwan Market" },
         },
       ],
     },
     {
       path: "/user",
+      meta: { requiresAuth: true },
       children: [
         {
           path: "realAccount",
           component: userAccount,
-          meta: { name: "RealAccount" },
         },
         {
           path: "virtualAccount",
           component: userAccount,
-          meta: { name: "VirtualAccount" },
         },
         {
           path: "tradingJournal",
           component: tradingJournal,
-          meta: { name: "TradingJournal" },
         },
         {
           path: "favoriteAssets",
           component: favoriteAssets,
-          meta: { name: "FavoriteAssets" },
         },
         {
           path: "userSetting",
           component: userSetting,
-          meta: { name: "UserSetting" },
         },
       ],
     },
     {
       path: "/targets",
+      meta: { requiresAuth: true },
       component: targetDetail,
-      meta: { name: "TargetDetail" },
     },
     {
       path: "/auth",
       component: UserAuth,
-      meta: { name: "UserAuth", hideHeaderAndFooter: true },
+      meta: { hideHeaderAndFooter: true },
+      
     },
     { path: "/:notFound(.*)", component: NotFound },
   ],
 });
 
 // router.beforeEach(function (to, _, next) {
-//   if (to.meta.requiresAuth && !store.getters.isAuthenticated) {
+//   if (to.meta.requiresAuth && !$store.getters.isAuthenticated) {
 //     next("/auth");
-//   } else if (to.meta.requiresUnauth && store.getters.isAuthenticated) {
-//     next("/coaches");
 //   } else {
 //     next();
 //   }

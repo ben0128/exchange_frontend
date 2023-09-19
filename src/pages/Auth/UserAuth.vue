@@ -9,47 +9,39 @@
       <div class="card-body register-card-body">
         <div class="logo-image"></div>
         <p class="login-box-msg" v-html="description"></p>
-        <form action="../../index.html" method="post">
-          <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <input
-              type="password"
-              class="form-control"
-              placeholder="Password"
-            />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3" v-if="!checkMode">
-            <input
-              type="password"
-              class="form-control"
-              placeholder="Retype password"
-            />
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
+        <form
+          action="../../index.html"
+          method="post"
+          @submit.prevent="submitForm"
+        >
+          <base-input
+            icon="envelope"
+            inputType="email"
+            placeText="Email"
+            v-model="email"
+          ></base-input>
+          <base-input
+            icon="lock"
+            inputType="password"
+            placeText="Password"
+            v-model="password"
+          ></base-input>
+          <base-input
+            icon="lock"
+            inputType="password"
+            placeText="Password"
+            v-if="!checkMode"
+            v-model="checkPassword"
+          ></base-input>
           <div class="row">
             <div class="col-8">
-              <div class="icheck-primary">
+              <div class="icheck-primary" @click.prevent="changeBoxMode">
                 <input
                   type="checkbox"
                   id="agreeTerms"
                   name="terms"
                   value="agree"
+                  v-model="boxMode"
                 />
                 <label for="agreeTerms" v-if="checkMode"> Remember Me </label>
                 <label for="agreeTerms" v-else>
@@ -60,11 +52,7 @@
             </div>
 
             <div class="col-4">
-              <button
-                type="submit"
-                class="btn btn-primary btn-block"
-                @click.prevent="submitForm"
-              >
+              <button type="submit" class="btn btn-primary btn-block">
                 {{ buttonText }}
               </button>
             </div>
@@ -85,8 +73,8 @@
           <a href="#" @click="changeMode">I already have a membership</a>
         </div>
         <div v-else>
-          <a href="#">I forgot my password</a>
-          <br />
+          <!-- <a href="#">I forgot my password</a> -->
+          <!-- <br /> -->
           <a href="#" @click="changeMode">Register a new membership</a>
         </div>
       </div>
@@ -94,64 +82,87 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useStore } from "vuex";
 import background from "../../assets/loginbackground.jpg";
 
-export default {
-  setup() {
-    const bgImagePath = ref(background);
-    const show = ref(false);
-    const text = ref("本網站僅供參考，不構成投資建議!!");
-    const mode = ref("Login");
+const bgImagePath = ref(background);
+const show = ref(false);
+const text = ref("本網站僅供參考，不構成投資建議!!");
+const mode = ref("Login");
+const email = ref("");
+const password = ref("");
+const checkPassword = ref("");
+const store = useStore();
+const boxMode = ref(false);
 
-    function changeShow(bool) {
-      show.value = bool;
+function changeShow(bool) {
+  show.value = bool;
+}
+
+const buttonText = computed(() => {
+  return mode.value === "Login" ? "Login" : "Register";
+});
+
+const description = computed(() => {
+  return mode.value === "Login"
+    ? "<strong>Login</strong> to continue"
+    : "<strong>Register</strong> a new membership";
+});
+
+function changeBoxMode() {
+  boxMode.value = !boxMode.value;
+}
+
+function submitForm() {
+  if (mode.value === "Login") {
+    alert("Login");
+  } else if (mode.value === "Register") {
+    if (password.value !== checkPassword.value) {
+      alert("密碼不一致");
+      return;
+    }
+    if (email.value === "" || password.value === "") {
+      alert("請輸入帳號密碼");
+      return;
+    }
+    if (password.value.length < 6) {
+      alert("密碼長度不足6碼");
+      return;
+    }
+    // checkbox要打勾
+    if (boxMode.value === false && mode.value === "Register") {
+      alert("請勾選同意條款");
+      return;
     }
 
-    const buttonText = computed(() => {
-      return mode.value === "Login" ? "Login" : "Register";
+    store.dispatch("signup", {
+      email: email.value,
+      password: password.value,
+      checkPassword: checkPassword.value,
     });
+  }
+}
 
-    const description = computed(() => {
-      return mode.value === "Login"
-        ? "<strong>Login</strong> to continue"
-        : "<strong>Register</strong> a new membership";
-    });
+function changeMode() {
+  mode.value = mode.value === "Login" ? "Register" : "Login";
+}
 
-    function submitForm() {}
-    onMounted(() => {
-      document.body.style.backgroundImage = `url(${bgImagePath.value})`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundRepeat = "no-repeat";
-      document.body.style.backgroundPosition = "center center";
-    });
+const checkMode = computed(() => {
+  return mode.value === "Login";
+});
 
-    function changeMode() {
-      mode.value = mode.value === "Login" ? "Register" : "Login";
-    }
+onMounted(() => {
+  document.body.style.backgroundImage = `url(${bgImagePath.value})`;
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center center";
+});
 
-    const checkMode = computed(() => {
-      return mode.value === "Login";
-    });
-
-    onBeforeUnmount(() => {
-      document.body.style.backgroundImage = "";
-    });
-    return {
-      bgImagePath,
-      show,
-      changeShow,
-      text,
-      mode,
-      buttonText,
-      submitForm,
-      description,
-      changeMode,
-      checkMode,
-    };
-  },
-};
+onBeforeUnmount(() => {
+  document.body.style.backgroundImage = "";
+});
 </script>
 
 <style scoped>
