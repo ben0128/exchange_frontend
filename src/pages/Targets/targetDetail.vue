@@ -222,7 +222,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import tradingTarget from "../../components/charts/tradingTarget.vue";
 
@@ -236,6 +236,8 @@ const sliderValue = ref(0);
 const store = useStore();
 const account = ref(0);
 const price = ref(0);
+let shares = ref(0);
+let totalValue = ref(0);
 
 async function searchStock(keyword) {
   target.value = "";
@@ -271,14 +273,10 @@ onMounted(async () => {
   account.value = store.getters.getAccount;
 });
 
-const totalValue = computed(() => {
-  //取到小數點後兩位
-  return (sliderValue.value * account.value * 0.01).toFixed(2);
-});
-
-const shares = computed(() => {
-  return (totalValue.value / price.value).toFixed(1);
-});
+watch(sliderValue, (newSliderValue) => {
+  totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2)
+  shares = (totalValue.value / price.value).toFixed(1);
+})
 
 watch(searchQuery, (newTarget) => {
   // 在 target 变化时，判断是否为空，然后清空 searchQuery
