@@ -35,13 +35,13 @@
           ></base-input>
           <div class="row">
             <div class="col-8">
-              <div class="icheck-primary" @click.prevent="changeBoxMode">
+              <div class="icheck-primary" @click.prevent="changeRememberMe">
                 <input
                   type="checkbox"
                   id="agreeTerms"
                   name="terms"
                   value="agree"
-                  v-model="boxMode"
+                  v-model="rememberMe"
                 />
                 <label for="agreeTerms" v-if="checkMode"> Remember Me </label>
                 <label for="agreeTerms" v-else>
@@ -53,7 +53,7 @@
 
             <div class="col-4">
               <button type="submit" class="btn btn-primary btn-block">
-                {{ buttonText }}
+                <span>{{ buttonText }}</span>
               </button>
             </div>
           </div>
@@ -86,6 +86,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import background from "../../assets/loginbackground.jpg";
+import router from "../../router";
 
 const bgImagePath = ref(background);
 const show = ref(false);
@@ -95,7 +96,7 @@ const email = ref("");
 const password = ref("");
 const checkPassword = ref("");
 const store = useStore();
-const boxMode = ref(false);
+const rememberMe = ref(false);
 
 function changeShow(bool) {
   show.value = bool;
@@ -111,32 +112,38 @@ const description = computed(() => {
     : "<strong>Register</strong> a new membership";
 });
 
-function changeBoxMode() {
-  boxMode.value = !boxMode.value;
+function changeRememberMe() {
+  rememberMe.value = !rememberMe.value;
 }
 
 async function submitForm() {
+  if (email.value === "" || password.value === "") {
+    return alert("請輸入帳號或密碼");
+  }
+  if (password.value.length < 6) {
+    return alert("密碼長度不足6碼");
+  }
+
   if (mode.value === "Login") {
-    alert("Login");
+    const res = await store.dispatch("login", {
+      email: email.value,
+      password: password.value,
+      rememberMe: rememberMe.value,
+    });
+    
+    if (res.success) {
+      router.push("/");
+    } else {
+      alert("帳號或密碼錯誤");
+    }
   } else if (mode.value === "Register") {
     if (password.value !== checkPassword.value) {
-      alert("密碼不一致");
-      return;
-    }
-    if (email.value === "" || password.value === "") {
-      alert("請輸入帳號密碼");
-      return;
-    }
-    if (password.value.length < 6) {
-      alert("密碼長度不足6碼");
-      return;
+      return alert("密碼不一致");
     }
     // checkbox要打勾
-    if (boxMode.value === false && mode.value === "Register") {
-      alert("請勾選同意條款");
-      return;
+    if (rememberMe.value === false && mode.value === "Register") {
+      return alert("請勾選同意條款");
     }
-
     const res = await store.dispatch("signup", {
       email: email.value,
       password: password.value,
@@ -146,7 +153,7 @@ async function submitForm() {
       alert("註冊成功");
       changeMode();
     } else {
-      alert("註冊失敗");
+      alert("此信箱已註冊！");
     }
   }
 }

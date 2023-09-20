@@ -4,8 +4,6 @@ import authActions from "./actions";
 
 const authModule = {
   state: {
-    isAuth: false,
-    token: null,
     email: '',
     password: '',
   },
