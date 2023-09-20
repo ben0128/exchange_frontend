@@ -4,7 +4,7 @@ export default {
   async getTargetPrice(_, payload) {
     try {
       const res = await axios.get(
-        `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${payload.target}&interval=1min&apikey=THTHIU7W1Q42J0EF`
+        `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${payload.target}&interval=1min&apikey=FGCW7CP7TSQRZZ86`
       );
       const timeSeriesData = res.data["Time Series (1min)"];
       const latestTimestamp = Object.keys(timeSeriesData)[0];

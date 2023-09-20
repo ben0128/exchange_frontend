@@ -79,7 +79,21 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="price">Price: {{ price }}</label>
+                <label for="price">Trade Price</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">USDT</span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="price"
+                    v-model="price"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">SHARES</span>
@@ -237,7 +251,7 @@ const store = useStore();
 const account = ref(0);
 const price = ref(0);
 let shares = ref(0);
-let totalValue = ref(0);
+const totalValue = ref(0);
 
 async function searchStock(keyword) {
   target.value = "";
@@ -273,9 +287,37 @@ onMounted(async () => {
   account.value = store.getters.getAccount;
 });
 
+// const sharesInput = computed({
+//   get: () => shares.value,
+//   set: (value) => {
+//     shares.value = value;
+//     updateTotalValue();
+//   },
+// });
+
+// const totalValueInput = computed({
+//   get: () => totalValue.value,
+//   set: (value) => {
+//     totalValue.value = value;
+//     updateShares();
+//   },
+// });
+
+// 当输入 shares 时，更新 totalValue 和 sliderValue
+// function updateTotalValue() {
+//   totalValue.value = (shares.value * price.value).toFixed(2);
+//   sliderValue.value = ((shares.value / account.value) * 100).toFixed(2);
+// }
+
+// // 当输入 totalValue 时，更新 shares 和 sliderValue
+// function updateShares() {
+//   shares.value = (totalValue.value / price.value).toFixed(1);
+//   sliderValue.value = ((shares.value / account.value) * 100).toFixed(2);
+// }
+
 watch(sliderValue, (newSliderValue) => {
   totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2)
-  shares = (totalValue.value / price.value).toFixed(1);
+  shares.value = (totalValue.value / price.value).toFixed(1);
 })
 
 watch(searchQuery, (newTarget) => {
