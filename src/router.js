@@ -8,7 +8,7 @@ const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
 const taiwanMarket = () => import("./pages/Markets/taiwanMarket.vue");
 const UserAuth = () => import("./pages/Auth/UserAuth.vue");
-const tradingJournal = () => import("./pages/User/tradingJournal.vue");
+const tradingJournal = () => import("./pages/Journals/tradeJournals.vue");
 const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
 const userSetting = () => import("./pages/User/userSetting.vue");
 const targetDetail = () => import("./pages/Targets/targetDetail.vue");
@@ -19,6 +19,7 @@ const router = createRouter({
     { path: "/", redirect: "/markets/allMarkets" },
     {
       path: "/markets",
+      meta: { requiresAuth: true },
       children: [
         {
           path: "allMarkets",
@@ -71,6 +72,11 @@ const router = createRouter({
     },
     {
       path: "/auth",
+      component: UserAuth,
+      meta: { hideHeaderAndFooter: true },
+    },
+    {
+      path: "/logout",
       component: UserAuth,
       meta: { hideHeaderAndFooter: true },
     },

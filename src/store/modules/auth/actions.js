@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 export default {
-  async login(context, payload) {
+  async login(_, payload) {
     try {
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/signin",
@@ -49,6 +49,32 @@ export default {
     } catch (error) {
       console.log(error);
       return { success: false, message: error.message };
+    }
+  },
+  async getUser(context) {
+    try {
+      const res = await axios.get(
+        "https://exchange-backend-kt8e.onrender.com/api/user",
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
+          },
+        }
+      );
+      if (res.status === 400) {
+        throw new Error(res.data.message);
+      }
+      if (res.status === 200) {
+        context.commit("setUserData", {
+          account: res.data.account,
+        });
+        return { success: true, message: "獲取用戶資料成功" };
+      }
+    } catch (error) {
+      console.log(error);
+      return { success: false, message: "獲取用戶資料失敗" };
     }
   },
 };

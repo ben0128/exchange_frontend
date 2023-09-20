@@ -68,6 +68,11 @@
               ><span class="fas fa-envelope"></span>Contact Me!!</a
             >
           </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="/logout" class="nav-link"
+              ><i class="fas fa-sign-out-alt"></i>Logout</a
+            >
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -78,7 +83,6 @@
 
 <script>
 import Logo from "../../assets/logo.jpg";
-// import { ref } from "vue";
 
 export default {
   setup() {
@@ -109,7 +113,8 @@ export default {
 .fa-vr-cardboard,
 .fa-book,
 .fa-gear,
-.fa-heart {
+.fa-heart,
+.fa-sign-out-alt {
   margin-right: 12px;
   margin-left: 6px;
 }

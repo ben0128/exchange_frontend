@@ -19,7 +19,7 @@ app.component("base-card", BaseCard);
 app.component("base-button", BaseButton);
 app.component("base-input", BaseInput);
 app.component("base-spinner", BaseSpinner);
-app.use(router)
-app.use(store)
+app.use(router);
+app.use(store);
 
 app.mount("#app");

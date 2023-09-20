@@ -6,6 +6,7 @@ const authModule = {
   state: {
     email: '',
     password: '',
+    account: null,
   },
   getters: authGetters,
   mutations: authMutations,
