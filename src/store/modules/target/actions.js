@@ -19,7 +19,6 @@ export default {
   },
   async addMarketOrder(context, payload) {
     try {
-      console.log(context.rootState.auth.token);
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/orders/marketOrder",
         {
@@ -46,7 +45,7 @@ export default {
       return { success: false };
     }
   },
-  async addLimitOrder(context, payload) {
+  async addLimitOrder(_, payload) {
     try {
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/orders/limitOrder",

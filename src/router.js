@@ -79,12 +79,12 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(function (to, _, next) {
-  if (to.meta.requiresAuth && (!localStorage.getItem("token") && !sessionStorage.getItem("token"))) {
-    next("/auth");
-  } else {
-    next();
-  }
-});
+// router.beforeEach(function (to, _, next) {
+//   if (to.meta.requiresAuth && (!localStorage.getItem("token") && !sessionStorage.getItem("token"))) {
+//     next("/auth");
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;
