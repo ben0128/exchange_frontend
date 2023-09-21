@@ -17,4 +17,58 @@ export default {
       return { success: false };
     }
   },
+  async addMarketOrder(context, payload) {
+    try {
+      console.log(context.rootState.auth.token);
+      const res = await axios.post(
+        "https://exchange-backend-kt8e.onrender.com/api/orders/marketOrder",
+        {
+          targetName: payload.targetName,
+          type: payload.activeOrderType,
+          shares: payload.shares,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${context.rootState.auth.token}`,
+          },
+        }
+      );
+      if (res.status === 400) {
+        throw new Error(res.data.message);
+      }
+      if (res.status === 200) {
+        return { success: true };
+      }
+    } catch (error) {
+      console.error(error);
+      return { success: false };
+    }
+  },
+  async addLimitOrder(context, payload) {
+    try {
+      const res = await axios.post(
+        "https://exchange-backend-kt8e.onrender.com/api/orders/limitOrder",
+        {
+          targetName: payload.targetName,
+          type: payload.activeOrderType,
+          shares: payload.shares,
+          price: payload.price,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${context.rootState.auth.token}`,
+          },
+        }
+      );
+      if (res.status === 400) {
+        throw new Error(res.data.message);
+      }
+      if (res.status === 200) {
+        return { success: true };
+      }
+    } catch (error) {
+      console.error(error);
+      return { success: false };
+    }
+  },
 };

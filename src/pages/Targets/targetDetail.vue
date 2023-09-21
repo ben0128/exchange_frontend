@@ -37,8 +37,8 @@
                     type="button"
                     class="btn"
                     :class="{
-                      'btn-primary': activeOrderType === 'Buy',
-                      'btn-danger': activeOrderType === 'Sell',
+                      'btn-primary': activeOrderType === 'buy',
+                      'btn-danger': activeOrderType === 'sell',
                       'btn-light': activeOrderType !== type,
                     }"
                     @click="changeActiveOrderButton(type)"
@@ -79,7 +79,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="marketPrice" v-if="activeTradeButton === 'Market'"
+                <label for="marketPrice" v-if="activeTradeButton === 'market'"
                   >Trade MarketPrice</label
                 >
                 <label for="limitPrice" v-else>Trade LimitPrice</label>
@@ -93,7 +93,7 @@
                     id="marketPrice"
                     v-model="price"
                     disabled
-                    v-if="activeTradeButton === 'Market'"
+                    v-if="activeTradeButton === 'market'"
                   />
                   <input
                     type="text"
@@ -253,10 +253,10 @@ import tradingTarget from "../../components/charts/tradingTarget.vue";
 
 const searchQuery = ref("");
 const target = ref("");
-const activeTradeButton = ref("Limit");
-const orderTypes = ["Buy", "Sell"];
-const activeOrderType = ref("Buy");
-const buttonTradeTypes = ["Limit", "Market"];
+const activeTradeButton = ref("limit");
+const orderTypes = ["buy", "sell"];
+const activeOrderType = ref("buy");
+const buttonTradeTypes = ["limit", "market"];
 const sliderValue = ref(0);
 const store = useStore();
 const account = ref(0);
@@ -284,7 +284,7 @@ function changeActiveOrderButton(button) {
 async function changeActiveTradeButton(button) {
   activeTradeButton.value = button;
   price.value = 0;
-  if (button === "Market") {
+  if (button === "market") {
     const res = await store.dispatch("target/getTargetPrice", {
       target: trimmedQuery,
     });
@@ -296,8 +296,30 @@ async function changeActiveTradeButton(button) {
   }
 }
 
-function submitForm() {
-  console.log("submit");
+async function submitForm() {
+  let res = null;
+  if (activeTradeButton.value === "market") {
+    res = await store.dispatch("target/addMarketOrder", {
+      targetName: target.value,
+      type: activeOrderType.value,
+      shares: shares.value,
+    });
+  } else {
+    res = await store.dispatch("target/addLimitOrder", {
+      targetName: target.value,
+      type: activeOrderType.value,
+      shares: shares.value,
+      price: price.value,
+    });
+  }
+  if (res.success) {
+    shares.value = 0;
+    totalValue.value = 0;
+    sliderValue.value = 0;
+    alert("交易成功");
+  } else {
+    alert("交易失敗");
+  }
 }
 
 onMounted(async () => {
