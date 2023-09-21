@@ -29,7 +29,9 @@ export default {
         },
         {
           headers: {
-            Authorization: `Bearer ${context.rootState.auth.token}`,
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
           },
         }
       );
@@ -56,7 +58,9 @@ export default {
         },
         {
           headers: {
-            Authorization: `Bearer ${context.rootState.auth.token}`,
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
           },
         }
       );

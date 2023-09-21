@@ -1,6 +1,5 @@
 const axios = require("axios");
 
-
 export default {
   async login(context, payload) {
     try {
@@ -20,7 +19,7 @@ export default {
         } else {
           sessionStorage.setItem("token", res.data.token);
         }
-        context.commit("clearUserData")
+        context.commit("clearUserData");
         return { success: true, message: "登入成功" };
       }
     } catch (error) {
