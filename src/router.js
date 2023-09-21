@@ -75,21 +75,16 @@ const router = createRouter({
       component: UserAuth,
       meta: { hideHeaderAndFooter: true },
     },
-    {
-      path: "/logout",
-      component: UserAuth,
-      meta: { hideHeaderAndFooter: true },
-    },
     { path: "/:notFound(.*)", component: NotFound },
   ],
 });
 
-// router.beforeEach(function (to, _, next) {
-//   if (to.meta.requiresAuth && (!localStorage.getItem("token") && !sessionStorage.getItem("token"))) {
-//     next("/auth");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach(function (to, _, next) {
+  if (to.meta.requiresAuth && (!localStorage.getItem("token") && !sessionStorage.getItem("token"))) {
+    next("/auth");
+  } else {
+    next();
+  }
+});
 
 export default router;

@@ -3,7 +3,7 @@
     <!-- Brand Logo -->
     <div>
       <a href="#" class="brand-link">
-        <img :src="logo" alt="" class="sidebar-logo" style="opacity: 0.8" />
+        <img :src="Logo" alt="" class="sidebar-logo" style="opacity: 0.8" />
       </a>
     </div>
     <!-- Sidebar -->
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="card-body">
-              <li class="nav-item account" >
+              <li class="nav-item account">
                 <a href="/user/realAccount" class="nav-link" id="real">
                   <i class="fa-solid fa-brazilian-real-sign"></i>
                   <p class="account-desc">Real Account</p>
@@ -69,7 +69,7 @@
             >
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="/logout" class="nav-link"
+            <a href="#" class="nav-link" @click="logout"
               ><i class="fas fa-sign-out-alt"></i>Logout</a
             >
           </li>
@@ -81,16 +81,13 @@
   </aside>
 </template>
 
-<script>
+<script setup>
 import Logo from "../../assets/logo.jpg";
+import { useStore } from "vuex";
+const store = useStore();
 
-export default {
-  setup() {
-    const logo = Logo;
-    return {
-      logo,
-    };
-  },
+const logout = () => {
+  store.commit("clearUserData");
 };
 </script>
 
@@ -137,7 +134,6 @@ export default {
 
 .card-body {
   padding-bottom: 0px;
-  ;
 }
 
 .account-desc {
@@ -147,5 +143,4 @@ export default {
 #real {
   margin: 0px 0px;
 }
-
 </style>

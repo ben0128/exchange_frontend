@@ -48,15 +48,15 @@
                 </div>
                 <div class="form-group btn-group">
                   <button
-                    v-for="type in buttonTypes"
+                    v-for="type in buttonTradeTypes"
                     :key="type"
                     type="button"
                     class="btn"
                     :class="{
-                      'btn-primary': activeButton === type,
-                      'btn-light': activeButton !== type,
+                      'btn-primary': activeTradeButton === type,
+                      'btn-light': activeTradeButton !== type,
                     }"
-                    @click="changeActiveButton(type)"
+                    @click="changeActiveTradeButton(type)"
                   >
                     {{ type }}
                   </button>
@@ -79,7 +79,10 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="price">Trade Price</label>
+                <label for="marketPrice" v-if="activeTradeButton === 'Market'"
+                  >Trade MarketPrice</label
+                >
+                <label for="limitPrice" v-else>Trade LimitPrice</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">USDT</span>
@@ -87,9 +90,17 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="price"
+                    id="marketPrice"
                     v-model="price"
                     disabled
+                    v-if="activeTradeButton === 'Market'"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="limitPrice"
+                    v-model="price"
+                    v-else
                   />
                 </div>
               </div>
@@ -108,7 +119,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="price"
+                    id="totalValue"
                     min="0"
                     v-model="totalValue"
                   />
@@ -242,40 +253,47 @@ import tradingTarget from "../../components/charts/tradingTarget.vue";
 
 const searchQuery = ref("");
 const target = ref("");
-const activeButton = ref("Limit");
+const activeTradeButton = ref("Limit");
 const orderTypes = ["Buy", "Sell"];
 const activeOrderType = ref("Buy");
-const buttonTypes = ["Limit", "Market"];
+const buttonTradeTypes = ["Limit", "Market"];
 const sliderValue = ref(0);
 const store = useStore();
 const account = ref(0);
-const price = ref(0);
 let shares = ref(0);
 const totalValue = ref(0);
+const price = ref(0);
+const trimmedQuery = ref("");
 
 async function searchStock(keyword) {
   target.value = "";
   price.value = "";
-  const trimmedQuery = keyword.trim().toUpperCase();
-  if (trimmedQuery) {
-    target.value = trimmedQuery;
+  trimmedQuery.value = keyword.trim().toUpperCase();
+  if (trimmedQuery.value) {
+    target.value = trimmedQuery.value;
   } else {
     target.value = "";
     searchQuery.value = "";
   }
-
-  const res = await store.dispatch("target/getTargetPrice", {
-    target: trimmedQuery,
-  });
-  price.value = Number(res.price) || 180;
 }
 
 function changeActiveOrderButton(button) {
   activeOrderType.value = button;
 }
 
-function changeActiveButton(button) {
-  activeButton.value = button;
+async function changeActiveTradeButton(button) {
+  activeTradeButton.value = button;
+  price.value = 0;
+  if (button === "Market") {
+    const res = await store.dispatch("target/getTargetPrice", {
+      target: trimmedQuery,
+    });
+    if (res.success) {
+      price.value = store.getters["target/getTargetPrice"];
+    } else {
+      price.value = 180;
+    }
+  }
 }
 
 function submitForm() {
@@ -287,38 +305,10 @@ onMounted(async () => {
   account.value = store.getters.getAccount;
 });
 
-// const sharesInput = computed({
-//   get: () => shares.value,
-//   set: (value) => {
-//     shares.value = value;
-//     updateTotalValue();
-//   },
-// });
-
-// const totalValueInput = computed({
-//   get: () => totalValue.value,
-//   set: (value) => {
-//     totalValue.value = value;
-//     updateShares();
-//   },
-// });
-
-// 当输入 shares 时，更新 totalValue 和 sliderValue
-// function updateTotalValue() {
-//   totalValue.value = (shares.value * price.value).toFixed(2);
-//   sliderValue.value = ((shares.value / account.value) * 100).toFixed(2);
-// }
-
-// // 当输入 totalValue 时，更新 shares 和 sliderValue
-// function updateShares() {
-//   shares.value = (totalValue.value / price.value).toFixed(1);
-//   sliderValue.value = ((shares.value / account.value) * 100).toFixed(2);
-// }
-
 watch(sliderValue, (newSliderValue) => {
-  totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2)
+  totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2);
   shares.value = (totalValue.value / price.value).toFixed(1);
-})
+});
 
 watch(searchQuery, (newTarget) => {
   // 在 target 变化时，判断是否为空，然后清空 searchQuery

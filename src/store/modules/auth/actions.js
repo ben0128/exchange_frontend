@@ -1,7 +1,8 @@
 const axios = require("axios");
 
+
 export default {
-  async login(_, payload) {
+  async login(context, payload) {
     try {
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/signin",
@@ -19,6 +20,7 @@ export default {
         } else {
           sessionStorage.setItem("token", res.data.token);
         }
+        context.commit("clearUserData")
         return { success: true, message: "登入成功" };
       }
     } catch (error) {
@@ -67,7 +69,7 @@ export default {
         throw new Error(res.data.message);
       }
       if (res.status === 200) {
-        context.commit("setUserData", {
+        context.commit("setUserAccount", {
           account: res.data.account,
         });
         return { success: true, message: "獲取用戶資料成功" };
