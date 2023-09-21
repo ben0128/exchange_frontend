@@ -50,11 +50,21 @@
                 </label>
               </div>
             </div>
-
             <div class="col-4">
-              <button type="submit" class="btn btn-primary btn-block">
-                <span>{{ buttonText }}</span>
-              </button>
+              <div v-if="!isLoading">
+                <button type="submit" class="btn btn-primary btn-block">
+                  <span>{{ buttonText }}</span>
+                </button>
+              </div>
+              <div v-else>
+                <button class="btn btn-primary" type="button" disabled>
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
             </div>
           </div>
         </form>
@@ -97,6 +107,7 @@ const password = ref("");
 const checkPassword = ref("");
 const store = useStore();
 const rememberMe = ref(false);
+const isLoading = ref(false);
 
 function changeShow(bool) {
   show.value = bool;
@@ -123,17 +134,19 @@ async function submitForm() {
   if (password.value.length < 6) {
     return alert("密碼長度不足6碼");
   }
-
   if (mode.value === "Login") {
+    isLoading.value = true;
     const res = await store.dispatch("login", {
       email: email.value,
       password: password.value,
       rememberMe: rememberMe.value,
     });
-    
+
     if (res.success) {
+      isLoading.value = false;
       router.push("/");
     } else {
+      isLoading.value = false;
       alert("帳號或密碼錯誤");
     }
   } else if (mode.value === "Register") {
@@ -144,15 +157,18 @@ async function submitForm() {
     if (rememberMe.value === false && mode.value === "Register") {
       return alert("請勾選同意條款");
     }
+    isLoading.value = true;
     const res = await store.dispatch("signup", {
       email: email.value,
       password: password.value,
       checkPassword: checkPassword.value,
     });
     if (res.success) {
+      isLoading.value = false;
       alert("註冊成功");
       changeMode();
     } else {
+      isLoading.value = false;
       alert("此信箱已註冊！");
     }
   }
@@ -199,7 +215,6 @@ onBeforeUnmount(() => {
   color: #cf1212;
   margin-bottom: 20px;
 }
-
 .login-box-msg {
   margin: 0 auto;
 }

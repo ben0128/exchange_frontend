@@ -13,7 +13,6 @@ export default {
       context.commit("setTargetPrice", latestPrice);
       return { success: true };
     } catch (error) {
-      console.error(error);
       return { success: false };
     }
   },
