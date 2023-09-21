@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header">
       <!-- 標題置中 -->
-      <h3 class="card-title">Trade Journal</h3>
+      <h3 class="card-title">Trade Journals</h3>
       <div class="card-tools">
         <button
           type="button"
@@ -18,31 +18,29 @@
       <table class="table table-head-fixed text-nowrap">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Date</th>
+            <th>No.</th>
+            <th>createdAt</th>
+            <th>updatedAt</th>
             <th>Title</th>
             <th>Content</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>183</td>
-            <td>11-7-2014</td>
-            <td>Big short day</td>
-            <td>Take profit rightnow</td>
-            <td><button type="button" class="btn btn-primary">Read</button></td>
+          <tr v-for="journal in journals" :key="journal.id">
+            <td>{{ journal.no }}</td>
+            <td>{{ journal.createdAt }}</td>
+            <td>{{ journal.updatedAt }}</td>
+            <td>{{ journal.title }}</td>
+            <td>{{ journal.content }}</td>
             <td>
-              <button type="button" class="btn btn-danger">Delete</button>
+              <button class="btn btn-primary">
+                <span>Read</span>
+              </button>
             </td>
-          </tr>
-          <tr>
-            <td>219</td>
-            <td>11-7-2014</td>
-            <td>Looooong today</td>
-            <td>Fed Chair Powell tonight</td>
-            <td><button type="button" class="btn btn-primary">Read</button></td>
             <td>
-              <button type="button" class="btn btn-danger">Delete</button>
+              <button class="btn btn-danger">
+                <span>Delete</span>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -52,17 +50,21 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
-// import { useRouter } from "vue-router";
 
 const store = useStore();
 
+const journals = computed(() => {
+  return store.state.journal.journals;
+});
+
 function getAllJournals() {
-  store.dispatch("journals/getAllJournals");
+  store.dispatch("journal/getAllJournals");
 }
+
 onMounted(() => {
-  getAllJournals()
+  getAllJournals();
 });
 </script>
 
