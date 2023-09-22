@@ -85,6 +85,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import router from "../../router";
 import background from "../../assets/loginbackground.jpg";
 
 const bgImagePath = ref(background);
@@ -117,7 +118,19 @@ function changeBoxMode() {
 
 async function submitForm() {
   if (mode.value === "Login") {
-    alert("Login");
+    if (email.value === "" || password.value === "") {
+      alert("請輸入帳號密碼");
+      return;
+    }
+    const res = await store.dispatch("login", {
+      email: email.value,
+      password: password.value,
+    });
+    if (res.success) {
+      router.push("/");
+    } else {
+      alert("登入失敗");
+    }
   } else if (mode.value === "Register") {
     if (password.value !== checkPassword.value) {
       alert("密碼不一致");

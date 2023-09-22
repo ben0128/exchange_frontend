@@ -12,6 +12,7 @@ const tradingJournal = () => import("./pages/User/tradingJournal.vue");
 const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
 const userSetting = () => import("./pages/User/userSetting.vue");
 const targetDetail = () => import("./pages/Targets/targetDetail.vue");
+import state from "./store/index.js";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -79,12 +80,12 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach(function (to, _, next) {
-//   if (to.meta.requiresAuth && !$store.getters.isAuthenticated) {
-//     next("/auth");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach(function (to, _, next) {
+  if (to.meta.requiresAuth && !state.isAuth) {
+    next("/auth");
+  } else {
+    next();
+  }
+});
 
 export default router;
