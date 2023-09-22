@@ -31,7 +31,7 @@
             <td>{{ journal.createdAt }}</td>
             <td>{{ journal.updatedAt }}</td>
             <td>{{ journal.title }}</td>
-            <td>{{ journal.content }}</td>
+            <td>{{ journal.content.substring(0, 10) }}</td>
             <td>
               <button class="btn btn-primary">
                 <span>Read</span>
