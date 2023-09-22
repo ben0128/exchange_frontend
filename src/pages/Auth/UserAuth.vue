@@ -1,8 +1,8 @@
 <template>
   <div class="register-box">
     <base-dialog
-      :show="show"
-      :title="text"
+      v-model:show="show"
+      :title="title"
       @update:show="changeShow"
     ></base-dialog>
     <div class="card">
@@ -100,7 +100,7 @@ import background from "../../assets/loginbackground.jpg";
 
 const bgImagePath = ref(background);
 const show = ref(false);
-const text = ref("本網站僅供參考，不構成投資建議!!");
+const title = ref("本網站僅供參考，不構成投資建議!!");
 const mode = ref("Login");
 const email = ref("");
 const password = ref("");

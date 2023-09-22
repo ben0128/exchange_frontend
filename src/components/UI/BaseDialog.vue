@@ -1,14 +1,18 @@
 <template>
   <teleport to="body">
-    <div v-if="ifShow" @click="tryClose" class="backdrop"></div>
+    <div v-if="props.show" @click="tryClose" class="backdrop"></div>
     <transition name="dialog">
-      <dialog open v-if="ifShow">
+      <dialog open v-if="props.show">
         <header>
-          <slot name="header">
-            <h2>{{ text }}</h2>
-          </slot>
+          <h2>{{ props.title }}</h2>
         </header>
+        <section>
+          <h5>{{ props.content }}</h5>
+        </section>
         <menu>
+          <base-button @click="editJournal" v-if="props.mode === 'journal'"
+            >Edit</base-button
+          >
           <base-button @click="tryClose">Close</base-button>
         </menu>
       </dialog>
@@ -16,23 +20,32 @@
   </teleport>
 </template>
 
-<script>
-import { ref, watch } from "vue";
-export default {
-  props: ["show", "title"],
-  setup(props,  context ) {
-    const ifShow = ref(props.show);
-    const text = ref(props.title);
-    function tryClose() {
-      context.emit("update:show", false);
-    }
+<script setup>
+import { defineProps, defineEmits } from "vue";
 
-    watch(() => props.show, (newVal) => {
-      ifShow.value = newVal;
-    });
-    return { ifShow, text, tryClose };
+const props = defineProps({
+  show: {
+    type: Boolean,
+    required: true,
   },
-};
+  mode: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
+  },
+});
+
+const emit = defineEmits(["update:show"]);
+function tryClose() {
+  emit("update:show", false);
+}
+function editJournal() {}
 </script>
 
 <style scoped>

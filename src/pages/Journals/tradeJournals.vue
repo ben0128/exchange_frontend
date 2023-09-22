@@ -1,66 +1,94 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <!-- 標題置中 -->
-      <h3 class="card-title">Trade Journals</h3>
-      <div class="card-tools">
-        <button
-          type="button"
-          class="btn btn-tool"
-          data-card-widget="collapse"
-          title="Collapse"
-        >
-          <i class="fas fa-minus"></i>
-        </button>
+  <div class="jounal-box">
+    <base-dialog
+      v-model:show="show"
+      :mode="'journal'"
+      :title="journalTitle"
+      :content="journalContent"
+      @update:show="closeDialog"
+    ></base-dialog>
+    <div class="card">
+      <div class="card-header">
+        <!-- 標題置中 -->
+        <h3 class="card-title">Trade Journals</h3>
+        <div class="card-tools">
+          <button
+            type="button"
+            class="btn btn-tool"
+            data-card-widget="collapse"
+            title="Collapse"
+          >
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="card-body table-responsive p-0" style="height: 300px">
-      <table class="table table-head-fixed text-nowrap">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>createdAt</th>
-            <th>updatedAt</th>
-            <th>Title</th>
-            <th>Content</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="journal in journals" :key="journal.id">
-            <td>{{ journal.no }}</td>
-            <td>{{ journal.createdAt }}</td>
-            <td>{{ journal.updatedAt }}</td>
-            <td>{{ journal.title }}</td>
-            <td>{{ journal.content }}</td>
-            <td>
-              <button class="btn btn-primary">
-                <span>Read</span>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-danger">
-                <span>Delete</span>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="card-body table-responsive p-0" style="height: 300px">
+        <table class="table table-head-fixed text-nowrap">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>createdAt</th>
+              <th>updatedAt</th>
+              <th>Title</th>
+              <th>Content</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="journal in journals" :key="journal.id">
+              <td>{{ journal.no }}</td>
+              <td>{{ journal.createdAt }}</td>
+              <td>{{ journal.updatedAt }}</td>
+              <td>{{ journal.title }}</td>
+              <td>{{ journal.content }}</td>
+              <td>
+                <button class="btn btn-primary" @click="getJournal(journal.id)">
+                  <span>Read</span>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-danger">
+                  <span>Delete</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
+const show = ref(false);
+const journalTitle = ref("");
+const journalContent = ref("");
+const journals = ref([]);
 
-const journals = computed(() => {
-  return store.state.journal.journals;
-});
+function closeDialog(bool) {
+  show.value = bool;
+  store.commit("journal/getOneJournal", {
+    title: "",
+    content: "",
+    _id: "",
+    updatedAt: "",
+  });
+}
 
-function getAllJournals() {
-  store.dispatch("journal/getAllJournals");
+async function getAllJournals() {
+  await store.dispatch("journal/getAllJournals");
+  journals.value = store.getters["journal/getAllJournals"];
+}
+
+async function getJournal(id) {
+  console.log(id)
+  await store.dispatch("journal/getJournal", id);
+  journalTitle.value = store.getters["journal/getJournal"].title;
+  journalContent.value = store.getters["journal/getJournal"].content;
+  show.value = true;
 }
 
 onMounted(() => {

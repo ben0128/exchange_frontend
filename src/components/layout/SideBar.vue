@@ -87,7 +87,7 @@ import { useStore } from "vuex";
 const store = useStore();
 
 const logout = () => {
-  store.commit("clearUserData");
+  store.commit("clearToken");
 };
 </script>
 
