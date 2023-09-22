@@ -13,5 +13,5 @@ export default {
   },
   setUserAccount(state, payload) {
     state.account = payload.account;
-  }
-}
+  },
+};

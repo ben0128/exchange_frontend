@@ -8,7 +8,15 @@ export default {
       createdAt: formatDate(item.createdAt),
       updatedAt: formatDate(item.updatedAt)
     }));
-  }
+  },
+  getOneJournal(state, payload) {
+    state.journal = {
+      id: payload.id,
+      title: payload.title,
+      content: payload.content,
+      updatedAt: formatDate(payload.updatedAt)
+    };
+  },
 }
 
 function formatDate(dateString) {

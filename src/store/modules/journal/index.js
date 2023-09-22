@@ -6,6 +6,7 @@ const journalModule = {
   namespaced: true,
   state: {
     journals: [],
+    journal: {},
   },
   getters: journalGetters,
   mutations: journalMutations,

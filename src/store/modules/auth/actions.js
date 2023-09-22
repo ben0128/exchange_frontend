@@ -38,7 +38,7 @@ export default {
         }
       );
       if (res.status === 400) {
-        throw new Error(res.data.message);
+        throw new Error(res.message);
       }
       if (res.status === 200) {
         context.commit("setUserData", {
@@ -49,7 +49,7 @@ export default {
       }
     } catch (error) {
       console.log(error);
-      return { success: false, message: error.message };
+      return { success: false, message: "註冊失敗" };
     }
   },
   async getUser(context) {

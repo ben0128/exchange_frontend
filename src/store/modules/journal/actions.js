@@ -18,11 +18,26 @@ export default {
       }
       if (res.status === 200) {
         context.commit("getJournals", res.data.journals);
-        console.log(context.state.journals);
         return { success: true };
       }
     } catch (error) {
       return { success: false };
     }
   },
+  async getJournal(context, payload) {
+    try {
+      // 從state journals中找出符合payload id的journal,並放入state journal
+      const journal = await context.state.journals.find(
+        (journal) => journal.id === payload.id
+      );
+      if (journal) {
+        context.commit("getOneJournal", journal);
+        return { success: true };
+      } else {
+        return { success: false };
+      }
+    } catch (error) {
+      return { success: false };
+    }
+  }
 };

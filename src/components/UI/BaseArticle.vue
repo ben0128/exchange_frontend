@@ -3,15 +3,42 @@
     <div v-if="props.show" @click="tryClose" class="backdrop"></div>
     <transition name="dialog">
       <dialog open v-if="props.show">
-        <header>
-          <h2>{{ props.title }}</h2>
-        </header>
-        <section>
-          <h5>{{ props.content }}</h5>
-        </section>
-        <menu>
-          <base-button @click="tryClose">Close</base-button>
-        </menu>
+        <div class="card card-primary card-outline">
+          <div class="card-body p-0">
+            <div class="mailbox-read-info">
+              <h5>{{ props.title }}</h5>
+              <h6>
+                <span class="mailbox-read-time float-right"
+                  >Lastupdated: {{ props.updatedAt }}</span
+                >
+              </h6>
+            </div>
+            <div
+              class="mailbox-read-message"
+              style="overflow: auto; max-height: 400px"
+            >
+              <p>
+                {{ props.content }}
+              </p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="editJournal(props.id)"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger float-right"
+              @click="tryClose"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       </dialog>
     </transition>
   </teleport>
@@ -21,15 +48,19 @@
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
+  id: {
+    type: String,
+  },
   show: {
     type: Boolean,
-    required: true,
   },
   title: {
     type: String,
-    required: true,
   },
   content: {
+    type: String,
+  },
+  updatedAt: {
     type: String,
   },
 });
@@ -38,6 +69,8 @@ const emit = defineEmits(["update:show"]);
 function tryClose() {
   emit("update:show", false);
 }
+
+function editJournal() {}
 </script>
 
 <style scoped>
@@ -64,29 +97,6 @@ dialog {
   margin: 0;
   overflow: hidden;
   background-color: white;
-}
-
-header {
-  background-color: #3a0061;
-  color: white;
-  width: 100%;
-  padding: 1rem;
-}
-
-header h2 {
-  margin: 0 auto;
-  text-align: center;
-}
-
-section {
-  padding: 1rem;
-}
-
-menu {
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
 }
 
 .dialog-enter-from,

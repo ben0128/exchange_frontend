@@ -31,7 +31,7 @@
             <td>{{ journal.createdAt }}</td>
             <td>{{ journal.updatedAt }}</td>
             <td>{{ journal.title }}</td>
-            <td>{{ journal.content.substring(0, 10) }}</td>
+            <td>{{ journal.content }}</td>
             <td>
               <button class="btn btn-primary">
                 <span>Read</span>
@@ -50,17 +50,37 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
+const show = ref(false);
+const journals = ref([]);
+let journal = ref({});
 
-const journals = computed(() => {
-  return store.state.journal.journals;
-});
+function closeArticle(bool) {
+  show.value = bool;
+  store.commit("journal/getOneJournal", {
+    title: "",
+    content: "",
+    id: "",
+    updatedAt: "",
+  });
+}
 
-function getAllJournals() {
-  store.dispatch("journal/getAllJournals");
+async function getAllJournals() {
+  await store.dispatch("journal/getAllJournals");
+  journals.value = store.getters["journal/getAllJournals"];
+}
+
+async function getJournal(id) {
+  if (id === undefined) return;
+  const res = await store.dispatch("journal/getJournal", { id });
+  if (res.success) {
+    journal.value = store.getters["journal/getJournal"];
+    console.log(journal.value);
+    show.value = true;
+  }
 }
 
 onMounted(() => {
