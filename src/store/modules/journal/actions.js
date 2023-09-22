@@ -27,11 +27,15 @@ export default {
   async getJournal(context, payload) {
     try {
       // 從state journals中找出符合payload id的journal,並放入state journal
-      const journal = context.state.journals.find(
-        (journal) => journal._id === payload.id
+      const journal = await context.state.journals.find(
+        (journal) => journal.id === payload.id
       );
-      console.log(journal)
-      context.commit("getOneJournal", journal);
+      if (journal) {
+        context.commit("getOneJournal", journal);
+        return { success: true };
+      } else {
+        return { success: false };
+      }
     } catch (error) {
       return { success: false };
     }

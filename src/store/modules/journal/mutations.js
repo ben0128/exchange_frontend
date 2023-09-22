@@ -11,7 +11,7 @@ export default {
   },
   getOneJournal(state, payload) {
     state.journal = {
-      id: payload._id,
+      id: payload.id,
       title: payload.title,
       content: payload.content,
       updatedAt: formatDate(payload.updatedAt)

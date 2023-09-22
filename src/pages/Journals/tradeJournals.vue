@@ -1,12 +1,13 @@
 <template>
   <div class="jounal-box">
-    <base-dialog
+    <base-article
       v-model:show="show"
-      :mode="'journal'"
-      :title="journalTitle"
-      :content="journalContent"
-      @update:show="closeDialog"
-    ></base-dialog>
+      :id="journal.id"
+      :title="journal.title"
+      :content="journal.content"
+      :updatedAt="journal.updatedAt"
+      @update:show="closeArticle"
+    ></base-article>
     <div class="card">
       <div class="card-header">
         <!-- 標題置中 -->
@@ -39,7 +40,7 @@
               <td>{{ journal.createdAt }}</td>
               <td>{{ journal.updatedAt }}</td>
               <td>{{ journal.title }}</td>
-              <td>{{ journal.content }}</td>
+              <td>{{ journal.content.substring(0, 10) }}</td>
               <td>
                 <button class="btn btn-primary" @click="getJournal(journal.id)">
                   <span>Read</span>
@@ -64,16 +65,15 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const show = ref(false);
-const journalTitle = ref("");
-const journalContent = ref("");
 const journals = ref([]);
+let journal = ref({});
 
-function closeDialog(bool) {
+function closeArticle(bool) {
   show.value = bool;
   store.commit("journal/getOneJournal", {
     title: "",
     content: "",
-    _id: "",
+    id: "",
     updatedAt: "",
   });
 }
@@ -84,11 +84,13 @@ async function getAllJournals() {
 }
 
 async function getJournal(id) {
-  console.log(id)
-  await store.dispatch("journal/getJournal", id);
-  journalTitle.value = store.getters["journal/getJournal"].title;
-  journalContent.value = store.getters["journal/getJournal"].content;
-  show.value = true;
+  if (id === undefined) return;
+  const res = await store.dispatch("journal/getJournal", { id });
+  if (res.success) {
+    journal.value = store.getters["journal/getJournal"];
+    console.log(journal.value);
+    show.value = true;
+  }
 }
 
 onMounted(() => {

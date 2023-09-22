@@ -12,6 +12,10 @@ const BaseDialog = defineAsyncComponent(() =>
   import("./components//UI/BaseDialog.vue")
 );
 
+const BaseArticle = defineAsyncComponent(() =>
+  import("./components/UI/BaseArticle.vue")
+);
+
 const app = createApp(App);
 
 app.component("base-dialog", BaseDialog);
@@ -19,6 +23,7 @@ app.component("base-card", BaseCard);
 app.component("base-button", BaseButton);
 app.component("base-input", BaseInput);
 app.component("base-spinner", BaseSpinner);
+app.component("base-article", BaseArticle);
 app.use(router);
 app.use(store);
 

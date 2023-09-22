@@ -45,7 +45,7 @@
             </div>
           </div>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="/user/tradingJournal" class="nav-link"
+            <a href="/user/tradingJournals" class="nav-link"
               ><i class="fa-solid fa-book"></i>Trading Journal</a
             >
           </li>

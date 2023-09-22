@@ -12,6 +12,7 @@ const tradingJournal = () => import("./pages/Journals/tradeJournals.vue");
 const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
 const userSetting = () => import("./pages/User/userSetting.vue");
 const targetDetail = () => import("./pages/Targets/targetDetail.vue");
+const editJournal = () => import("./pages/Journals/editJournal.vue");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -52,8 +53,15 @@ const router = createRouter({
           component: userAccount,
         },
         {
-          path: "tradingJournal",
+          path: "tradingJournals",
           component: tradingJournal,
+          children: [
+            {
+              path: ":journalId",
+              component: editJournal,
+              props: true,
+            },
+          ],
         },
         {
           path: "favoriteAssets",
