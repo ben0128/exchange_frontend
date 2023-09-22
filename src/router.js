@@ -8,11 +8,10 @@ const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
 const taiwanMarket = () => import("./pages/Markets/taiwanMarket.vue");
 const UserAuth = () => import("./pages/Auth/UserAuth.vue");
-const tradingJournal = () => import("./pages/User/tradingJournal.vue");
+const tradingJournal = () => import("./pages/Journals/tradeJournals.vue");
 const favoriteAssets = () => import("./pages/User/favoriteAssets.vue");
 const userSetting = () => import("./pages/User/userSetting.vue");
 const targetDetail = () => import("./pages/Targets/targetDetail.vue");
-import state from "./store/index.js";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +19,7 @@ const router = createRouter({
     { path: "/", redirect: "/markets/allMarkets" },
     {
       path: "/markets",
+      meta: { requiresAuth: true },
       children: [
         {
           path: "allMarkets",
@@ -74,18 +74,17 @@ const router = createRouter({
       path: "/auth",
       component: UserAuth,
       meta: { hideHeaderAndFooter: true },
-      
     },
     { path: "/:notFound(.*)", component: NotFound },
   ],
 });
 
-router.beforeEach(function (to, _, next) {
-  if (to.meta.requiresAuth && !state.isAuth) {
-    next("/auth");
-  } else {
-    next();
-  }
-});
+// router.beforeEach(function (to, _, next) {
+//   if (to.meta.requiresAuth && (!localStorage.getItem("token") && !sessionStorage.getItem("token"))) {
+//     next("/auth");
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

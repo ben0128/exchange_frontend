@@ -1,6 +1,4 @@
 export default {
-  isAuthenticated(state) {
-    return state.isAuth;
-  }
+  getAccount: state => state.account,
 }
 

@@ -11,18 +11,20 @@ export default {
         }
       );
       if (res.status === 400) {
-        throw new Error(res);
+        throw new Error(res.data.message);
       }
       if (res.status === 200) {
-        context.commit("setAuth", {
-          isAuth: true,
-          token: res.token,
-        });
+        if (payload.rememberMe) {
+          localStorage.setItem("token", res.data.token);
+        } else {
+          sessionStorage.setItem("token", res.data.token);
+        }
+        context.commit("clearUserData");
         return { success: true, message: "登入成功" };
       }
     } catch (error) {
       console.log(error);
-      return { success: false, message: "登入失敗" };
+      return { success: false, message: "登入發生錯誤" };
     }
   },
   async signup(context, payload) {
@@ -48,6 +50,32 @@ export default {
     } catch (error) {
       console.log(error);
       return { success: false, message: "註冊失敗" };
+    }
+  },
+  async getUser(context) {
+    try {
+      const res = await axios.get(
+        "https://exchange-backend-kt8e.onrender.com/api/user",
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
+          },
+        }
+      );
+      if (res.status === 400) {
+        throw new Error(res.data.message);
+      }
+      if (res.status === 200) {
+        context.commit("setUserAccount", {
+          account: res.data.account,
+        });
+        return { success: true, message: "獲取用戶資料成功" };
+      }
+    } catch (error) {
+      console.log(error);
+      return { success: false, message: "獲取用戶資料失敗" };
     }
   },
 };

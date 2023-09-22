@@ -35,13 +35,13 @@
           ></base-input>
           <div class="row">
             <div class="col-8">
-              <div class="icheck-primary" @click.prevent="changeBoxMode">
+              <div class="icheck-primary" @click.prevent="changeRememberMe">
                 <input
                   type="checkbox"
                   id="agreeTerms"
                   name="terms"
                   value="agree"
-                  v-model="boxMode"
+                  v-model="rememberMe"
                 />
                 <label for="agreeTerms" v-if="checkMode"> Remember Me </label>
                 <label for="agreeTerms" v-else>
@@ -50,11 +50,21 @@
                 </label>
               </div>
             </div>
-
             <div class="col-4">
-              <button type="submit" class="btn btn-primary btn-block">
-                {{ buttonText }}
-              </button>
+              <div v-if="!isLoading">
+                <button type="submit" class="btn btn-primary btn-block">
+                  <span>{{ buttonText }}</span>
+                </button>
+              </div>
+              <div v-else>
+                <button class="btn btn-primary" type="button" disabled>
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
             </div>
           </div>
         </form>
@@ -96,7 +106,8 @@ const email = ref("");
 const password = ref("");
 const checkPassword = ref("");
 const store = useStore();
-const boxMode = ref(false);
+const rememberMe = ref(false);
+const isLoading = ref(false);
 
 function changeShow(bool) {
   show.value = bool;
@@ -112,54 +123,53 @@ const description = computed(() => {
     : "<strong>Register</strong> a new membership";
 });
 
-function changeBoxMode() {
-  boxMode.value = !boxMode.value;
+function changeRememberMe() {
+  rememberMe.value = !rememberMe.value;
 }
 
 async function submitForm() {
+  if (email.value === "" || password.value === "") {
+    return alert("請輸入帳號或密碼");
+  }
+  if (password.value.length < 6) {
+    return alert("密碼長度不足6碼");
+  }
   if (mode.value === "Login") {
-    if (email.value === "" || password.value === "") {
-      alert("請輸入帳號密碼");
-      return;
-    }
+    isLoading.value = true;
     const res = await store.dispatch("login", {
       email: email.value,
       password: password.value,
+      rememberMe: rememberMe.value,
     });
+
     if (res.success) {
+      isLoading.value = false;
       router.push("/");
     } else {
-      alert("登入失敗");
+      isLoading.value = false;
+      alert("帳號或密碼錯誤");
     }
   } else if (mode.value === "Register") {
     if (password.value !== checkPassword.value) {
-      alert("密碼不一致");
-      return;
-    }
-    if (email.value === "" || password.value === "") {
-      alert("請輸入帳號密碼");
-      return;
-    }
-    if (password.value.length < 6) {
-      alert("密碼長度不足6碼");
-      return;
+      return alert("密碼不一致");
     }
     // checkbox要打勾
-    if (boxMode.value === false && mode.value === "Register") {
-      alert("請勾選同意條款");
-      return;
+    if (rememberMe.value === false && mode.value === "Register") {
+      return alert("請勾選同意條款");
     }
-
+    isLoading.value = true;
     const res = await store.dispatch("signup", {
       email: email.value,
       password: password.value,
       checkPassword: checkPassword.value,
     });
     if (res.success) {
+      isLoading.value = false;
       alert("註冊成功");
       changeMode();
     } else {
-      alert("註冊失敗");
+      isLoading.value = false;
+      alert("此信箱已註冊！");
     }
   }
 }
@@ -205,7 +215,6 @@ onBeforeUnmount(() => {
   color: #cf1212;
   margin-bottom: 20px;
 }
-
 .login-box-msg {
   margin: 0 auto;
 }

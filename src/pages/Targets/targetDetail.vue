@@ -29,28 +29,40 @@
         <div class="row justify-content-center">
           <div class="content">
             <form @submit.prevent="submitForm">
-              <div class="form-group">
-                <label for="buyType">Buy or Sell</label>
-                <select class="form-control" id="buyType">
-                  <option>Buy</option>
-                  <option>Sell</option>
-                </select>
+              <div>
+                <div class="form-group btn-group">
+                  <button
+                    v-for="type in orderTypes"
+                    :key="type"
+                    type="button"
+                    class="btn"
+                    :class="{
+                      'btn-primary': activeOrderType === 'buy',
+                      'btn-danger': activeOrderType === 'sell',
+                      'btn-light': activeOrderType !== type,
+                    }"
+                    @click="changeActiveOrderButton(type)"
+                  >
+                    {{ type }}
+                  </button>
+                </div>
+                <div class="form-group btn-group">
+                  <button
+                    v-for="type in buttonTradeTypes"
+                    :key="type"
+                    type="button"
+                    class="btn"
+                    :class="{
+                      'btn-primary': activeTradeButton === type,
+                      'btn-light': activeTradeButton !== type,
+                    }"
+                    @click="changeActiveTradeButton(type)"
+                  >
+                    {{ type }}
+                  </button>
+                </div>
               </div>
-              <div class="form-group btn-group">
-                <button
-                  v-for="type in buttonTypes"
-                  :key="type"
-                  type="button"
-                  class="btn"
-                  :class="{
-                    'btn-primary': activeButton === type,
-                    'btn-light': activeButton !== type,
-                  }"
-                  @click="changeActiveButton(type)"
-                >
-                  {{ type }}
-                </button>
-              </div>
+
               <div class="form-group">
                 <label for="balance">Available Balance</label>
                 <div class="input-group">
@@ -61,32 +73,55 @@
                     type="text"
                     class="form-control"
                     id="balance"
-                    value="10000"
+                    v-model="account"
                     disabled
                   />
                 </div>
               </div>
               <div class="form-group">
-                <label for="price">Price</label>
+                <label for="marketPrice" v-if="activeTradeButton === 'market'"
+                  >Trade MarketPrice</label
+                >
+                <label for="limitPrice" v-else>Trade LimitPrice</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">USDT</span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="marketPrice"
+                    v-model="price"
+                    disabled
+                    v-if="activeTradeButton === 'market'"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="limitPrice"
+                    v-model="price"
+                    v-else
+                  />
+                </div>
+              </div>
+              <div class="form-group">
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">SHARES</span>
                   </div>
                   <input
-                  type="number"
+                    type="text"
                     class="form-control"
                     id="shares"
-                    min="1"
-                    step="1"
-                    value="0"
+                    min="0"
+                    v-model="shares"
                   />
                   <input
-                    type="number"
+                    type="text"
                     class="form-control"
-                    id="price"
-                    min="0.01"
-                    step="0.01"
-                    value="0"
+                    id="totalValue"
+                    min="0"
+                    v-model="totalValue"
                   />
                   <div class="input-group-append">
                     <span class="input-group-text">USD</span>
@@ -103,7 +138,8 @@
                   step="1"
                   v-model="sliderValue"
                 />
-                <span id="sliderValue">{{ sliderValue }}% Available Balance</span>
+                <p id="sliderValue">{{ sliderValue }}% Available Balance</p>
+                <p id="sliderUSDValue">{{ totalValue }}USD</p>
               </div>
               <button type="submit" class="btn btn-primary col-12">Buy</button>
             </form>
@@ -211,35 +247,90 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 import tradingTarget from "../../components/charts/tradingTarget.vue";
 
 const searchQuery = ref("");
 const target = ref("");
-const activeButton = ref("Limit");
-const buttonTypes = ["Limit", "Market"];
+const activeTradeButton = ref("limit");
+const orderTypes = ["buy", "sell"];
+const activeOrderType = ref("buy");
+const buttonTradeTypes = ["limit", "market"];
 const sliderValue = ref(0);
-// const tradeType = ref("Buy");
+const store = useStore();
+const account = ref(0);
+let shares = ref(0);
+const totalValue = ref(0);
+const price = ref(0);
+const trimmedQuery = ref("");
 
-function searchStock(keyword) {
+async function searchStock(keyword) {
   target.value = "";
-  console.log(target.value, keyword);
-  const trimmedQuery = keyword.trim().toUpperCase();
-  if (trimmedQuery) {
-    target.value = trimmedQuery;
+  price.value = "";
+  trimmedQuery.value = keyword.trim().toUpperCase();
+  if (trimmedQuery.value) {
+    target.value = trimmedQuery.value;
   } else {
     target.value = "";
     searchQuery.value = "";
   }
 }
 
-function changeActiveButton(button) {
-  activeButton.value = button;
+function changeActiveOrderButton(button) {
+  activeOrderType.value = button;
 }
 
-function submitForm() {
-  console.log("submit");
+async function changeActiveTradeButton(button) {
+  activeTradeButton.value = button;
+  price.value = 0;
+  if (button === "market") {
+    const res = await store.dispatch("target/getTargetPrice", {
+      target: trimmedQuery,
+    });
+    if (res.success) {
+      price.value = store.getters["target/getTargetPrice"];
+    } else {
+      price.value = 180;
+    }
+  }
 }
+
+async function submitForm() {
+  let res = null;
+  if (activeTradeButton.value === "market") {
+    res = await store.dispatch("target/addMarketOrder", {
+      targetName: target.value,
+      type: activeOrderType.value,
+      shares: shares.value,
+    });
+  } else {
+    res = await store.dispatch("target/addLimitOrder", {
+      targetName: target.value,
+      type: activeOrderType.value,
+      shares: shares.value,
+      price: price.value,
+    });
+  }
+  if (res.success) {
+    shares.value = 0;
+    totalValue.value = 0;
+    sliderValue.value = 0;
+    alert("交易成功");
+  } else {
+    alert("交易失敗");
+  }
+}
+
+onMounted(async () => {
+  await store.dispatch("getUser");
+  account.value = store.getters.getAccount;
+});
+
+watch(sliderValue, (newSliderValue) => {
+  totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2);
+  shares.value = (totalValue.value / price.value).toFixed(1);
+});
 
 watch(searchQuery, (newTarget) => {
   // 在 target 变化时，判断是否为空，然后清空 searchQuery
@@ -294,7 +385,7 @@ watch(searchQuery, (newTarget) => {
   width: 100%;
   height: 1.4rem; /* 调整滑块高度 */
   appearance: none; /* 隐藏默认样式 */
-  background-color: #fff; /* 背景颜色 */
+  background-color: #fffefe; /* 背景颜色 */
   border: none;
   border-radius: 0.5rem; /* 圆角边框 */
   outline: none;
@@ -325,8 +416,9 @@ watch(searchQuery, (newTarget) => {
 }
 
 /* 样式化滑块当前值显示 */
-#sliderValue {
-  display: inline-block;
+#sliderValue,
+#sliderUSDValue {
+  /* display: inline-block; */
   margin-left: 0.5rem; /* 调整当前值位置 */
   font-size: 1rem; /* 字体大小 */
   color: #007bff; /* 文字颜色 */
@@ -335,5 +427,11 @@ watch(searchQuery, (newTarget) => {
 
 .record {
   margin-top: 1rem;
+}
+
+.table td,
+.table th,
+h3 {
+  color: black;
 }
 </style>
