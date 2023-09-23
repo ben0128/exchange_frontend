@@ -8,8 +8,6 @@
 import { ref, onMounted, defineProps, computed } from "vue";
 import chartConfig from "../../../config/chart.js";
 const props = defineProps(["wIndex", "wTabs"]);
-// 導入wTabs
-
 
 const tradingViewSettings = ref({
   ...chartConfig,

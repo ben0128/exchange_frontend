@@ -54,13 +54,20 @@ const router = createRouter({
         },
         {
           path: "tradingJournals",
-          component: tradingJournal,
           children: [
             {
-              path: ":journalId",
+              path: "allJournals",
+              component: tradingJournal,
+            },
+            {
+              path: "newJournal",
+              component: editJournal,
+            },
+            {
+              path: "edit/:journalId",
               component: editJournal,
               props: true,
-            },
+            }
           ],
         },
         {

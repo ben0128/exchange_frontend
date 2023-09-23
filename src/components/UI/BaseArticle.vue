@@ -17,8 +17,7 @@
               class="mailbox-read-message"
               style="overflow: auto; max-height: 400px"
             >
-              <p>
-                {{ props.content }}
+              <p v-html="props.content">
               </p>
             </div>
           </div>
@@ -48,21 +47,11 @@
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  id: {
-    type: String,
-  },
-  show: {
-    type: Boolean,
-  },
-  title: {
-    type: String,
-  },
-  content: {
-    type: String,
-  },
-  updatedAt: {
-    type: String,
-  },
+  id: String,
+  show: Boolean,
+  title: String,
+  content: String,
+  updatedAt: String,
 });
 
 const emit = defineEmits(["update:show"]);

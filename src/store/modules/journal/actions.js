@@ -30,6 +30,7 @@ export default {
       const journal = await context.state.journals.find(
         (journal) => journal.id === payload.id
       );
+      // console.log(journal)
       if (journal) {
         context.commit("getOneJournal", journal);
         return { success: true };
@@ -39,5 +40,32 @@ export default {
     } catch (error) {
       return { success: false };
     }
-  }
+  },
+  async addJournal(_, payload) {
+    try {
+      const res = await axios.post(
+        "https://exchange-backend-kt8e.onrender.com/api/journals",
+        {
+          title: payload.title,
+          content: payload.content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
+          },
+        },
+      );
+      // console.log(res);
+      if (res.status === 400) {
+        throw new Error(res.data.message);
+      }
+      if (res.status === 200) {
+        return { success: true };
+      }
+    } catch (error) {
+      return { success: false };
+    }
+  },
 };

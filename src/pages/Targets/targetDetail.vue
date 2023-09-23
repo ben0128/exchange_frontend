@@ -344,7 +344,7 @@ watch(searchQuery, (newTarget) => {
 .search-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* 居中对齐 */
+  align-items: center;
 }
 .chart {
   /* 讓圖表大小能自動縮放 */

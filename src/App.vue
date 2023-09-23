@@ -54,11 +54,10 @@ export default {
 
 <style>
 .content-container {
-  margin-top: 60px; /* 根据您的头部导航栏高度来调整 */
+  margin-top: 60px;
 }
 body {
   background-color: rgb(32, 31, 31);
-  /* 可以使用其他颜色值，如 #000000 表示黑色 */
-  color: white; /* 可选：将文本颜色更改为白色，以提高可读性 */
+  color: white;
 }
 </style>
