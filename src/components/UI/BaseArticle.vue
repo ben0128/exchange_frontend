@@ -45,6 +45,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
+import router from "../../router"
 
 const props = defineProps({
   id: String,
@@ -59,7 +60,10 @@ function tryClose() {
   emit("update:show", false);
 }
 
-function editJournal() {}
+function editJournal(journalId) {
+  console.log(journalId);
+  router.push(`/user/tradingJournals/edit/${journalId}`);
+}
 </script>
 
 <style scoped>

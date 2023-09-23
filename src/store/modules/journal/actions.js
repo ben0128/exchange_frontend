@@ -43,23 +43,40 @@ export default {
   },
   async addJournal(_, payload) {
     try {
-      const res = await axios.post(
-        "https://exchange-backend-kt8e.onrender.com/api/journals",
-        {
-          title: payload.title,
-          content: payload.content,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${
-              localStorage.getItem("token") || sessionStorage.getItem("token")
-            }`,
+      let res;
+      if (payload.id === "") {
+        res = await axios.post(
+          "https://exchange-backend-kt8e.onrender.com/api/journals",
+          {
+            title: payload.title,
+            content: payload.content,
           },
-        },
-      );
-      // console.log(res);
+          {
+            headers: {
+              Authorization: `Bearer ${
+                localStorage.getItem("token") || sessionStorage.getItem("token")
+              }`,
+            },
+          }
+        );
+      } else {
+        res = await axios.put(
+          `https://exchange-backend-kt8e.onrender.com/api/journals/${payload.id}`,
+          {
+            title: payload.title,
+            content: payload.content,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${
+                localStorage.getItem("token") || sessionStorage.getItem("token")
+              }`,
+            },
+          }
+        );
+      }
       if (res.status === 400) {
-        throw new Error(res.data.message);
+        return { success: false };
       }
       if (res.status === 200) {
         return { success: true };
