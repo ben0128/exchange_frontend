@@ -85,4 +85,26 @@ export default {
       return { success: false };
     }
   },
+  async deleteJournal(_, journalId) {
+    try {
+      const res = await axios.delete(
+        `https://exchange-backend-kt8e.onrender.com/api/journals/${journalId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
+          },
+        }
+      );
+      if (res.status === 400) {
+        return { success: false };
+      }
+      if (res.status === 200) {
+        return { success: true };
+      }
+    } catch (error) {
+      return { success: false };
+    }
+  }
 };

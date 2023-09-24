@@ -9,7 +9,13 @@
         v-model="title"
       />
       <button @click="save" class="btn btn-primary ml-3">Save</button>
-      <button class="btn btn-danger ml-3" v-if="isEditing">Delete</button>
+      <button
+        class="btn btn-danger ml-3"
+        v-if="isEditing"
+        @click="deleteJournal"
+      >
+        Delete
+      </button>
       <a href="/user/tradingJournals/allJournals" class="btn btn-danger ml-3"
         >Cancel</a
       >
@@ -63,6 +69,16 @@ export default {
       console.log(res);
       // 跳转回日记列表页面
       this.$router.push("/user/tradingJournals/allJournals");
+    },
+    async deleteJournal() {
+      const id = this.$route.params.journalId;
+      if (!id) return;
+      const res = await this.$store.dispatch("journal/deleteJournal", id);
+      if (res.success) {
+        this.$router.push("/user/tradingJournals/allJournals");
+      } else {
+        alert("Delete failed.");
+      }
     },
   },
   created() {
