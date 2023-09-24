@@ -62,7 +62,6 @@
                   </button>
                 </div>
               </div>
-
               <div class="form-group">
                 <label for="balance">Available Balance</label>
                 <div class="input-group">
@@ -114,14 +113,14 @@
                     class="form-control"
                     id="shares"
                     min="0"
-                    v-model="shares"
+                    v-model.lazy="shares"
                   />
                   <input
                     type="text"
                     class="form-control"
                     id="totalValue"
                     min="0"
-                    v-model="totalValue"
+                    v-model.lazy="totalValue"
                   />
                   <div class="input-group-append">
                     <span class="input-group-text">USD</span>
@@ -148,108 +147,24 @@
       </div>
     </div>
     <div class="col-12 record">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Untraded Orders</h3>
-          <div class="card-tools">
-            <button
-              type="button"
-              class="btn btn-tool"
-              data-card-widget="collapse"
-              title="Collapse"
-            >
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="card-body table-responsive p-0" style="height: 300px">
-          <table class="table table-head-fixed text-nowrap">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Target</th>
-                <th>Type</th>
-                <th>Shares</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>220</td>
-                <td>11-7-2014</td>
-                <td>TSLA</td>
-                <td><span class="badge bg-blue">Buy</span></td>
-                <td><span class="tag tag-success">91</span></td>
-                <td>1222 USD</td>
-              </tr>
-              <tr>
-                <td>242</td>
-                <td>11-7-2014</td>
-                <td>AAPL</td>
-                <td><span class="badge bg-danger">Sell</span></td>
-                <td><span class="tag tag-warning">50</span></td>
-                <td>4530 USD</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Trade History</h3>
-          <div class="card-tools">
-            <button
-              type="button"
-              class="btn btn-tool"
-              data-card-widget="collapse"
-              title="Collapse"
-            >
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="card-body table-responsive p-0" style="height: 300px">
-          <table class="table table-head-fixed text-nowrap">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Target</th>
-                <th>Type</th>
-                <th>Shares</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>183</td>
-                <td>11-7-2014</td>
-                <td>TSLA</td>
-                <td><span class="badge bg-blue">Buy</span></td>
-                <td><span class="tag tag-success">9</span></td>
-                <td>123 USD</td>
-              </tr>
-              <tr>
-                <td>219</td>
-                <td>11-7-2014</td>
-                <td>AAPL</td>
-                <td><span class="badge bg-danger">Sell</span></td>
-                <td><span class="tag tag-warning">5</span></td>
-                <td>453 USD</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <trade-order
+        :orderArr="pendingOrders"
+        orderTitle="Unfilled Orders"
+      ></trade-order>
+      <trade-order
+        :orderArr="completedOrders"
+        orderTitle="Trade History"
+      ></trade-order>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import tradingTarget from "../../components/charts/tradingTarget.vue";
+// 導入tradeOrder.vue
+import tradeOrder from "../../components/trade/tradeOrder.vue";
 
 const searchQuery = ref("");
 const target = ref("");
@@ -260,10 +175,10 @@ const buttonTradeTypes = ["limit", "market"];
 const sliderValue = ref(0);
 const store = useStore();
 const account = ref(0);
-let shares = ref(0);
-const totalValue = ref(0);
 const price = ref(0);
 const trimmedQuery = ref("");
+const pendingOrders = ref([]);
+const completedOrders = ref([]);
 
 async function searchStock(keyword) {
   target.value = "";
@@ -286,10 +201,11 @@ async function changeActiveTradeButton(button) {
   price.value = 0;
   if (button === "market") {
     const res = await store.dispatch("target/getTargetPrice", {
-      target: trimmedQuery,
+      target: trimmedQuery.value,
     });
     if (res.success) {
-      price.value = store.getters["target/getTargetPrice"];
+      const targetPrice = store.getters["target/getTargetPrice"];
+      price.value = parseFloat(targetPrice).toFixed(2);
     } else {
       price.value = 180;
     }
@@ -299,13 +215,14 @@ async function changeActiveTradeButton(button) {
 async function submitForm() {
   let res = null;
   if (activeTradeButton.value === "market") {
-    res = await store.dispatch("target/addMarketOrder", {
+    // console.log(shares)
+    res = await store.dispatch("order/addMarketOrder", {
       targetName: target.value,
       type: activeOrderType.value,
       shares: shares.value,
     });
   } else {
-    res = await store.dispatch("target/addLimitOrder", {
+    res = await store.dispatch("order/addLimitOrder", {
       targetName: target.value,
       type: activeOrderType.value,
       shares: shares.value,
@@ -316,27 +233,47 @@ async function submitForm() {
     shares.value = 0;
     totalValue.value = 0;
     sliderValue.value = 0;
+    price.value = 0;
     alert("交易成功");
   } else {
     alert("交易失敗");
   }
 }
 
+async function setAllOrders() {
+  await store.dispatch("order/getAllOrders");
+  pendingOrders.value = [...store.getters["order/getPendingOrders"]];
+  completedOrders.value = [...store.getters["order/getCompletedOrders"]];
+}
+
 onMounted(async () => {
   await store.dispatch("getUser");
-  account.value = store.getters.getAccount;
+  account.value = store.getters.getAccount.toFixed(2);
+  await setAllOrders();
 });
 
-watch(sliderValue, (newSliderValue) => {
-  totalValue.value = (newSliderValue * account.value * 0.01).toFixed(2);
-  shares.value = (totalValue.value / price.value).toFixed(1);
+const totalValue = computed({
+  get() {
+    return (sliderValue.value * account.value * 0.01).toFixed(2);
+  },
+  set(newValue) {
+    sliderValue.value = (newValue / (account.value * 0.01)).toFixed(2);
+    shares.value = newValue / price.value;
+  },
 });
 
-watch(searchQuery, (newTarget) => {
-  // 在 target 变化时，判断是否为空，然后清空 searchQuery
-  if (!newTarget) {
-    target.value = "";
-  }
+const shares = computed({
+  get() {
+    return Math.floor(
+      Math.floor(sliderValue.value * 0.01 * account.value) / price.value
+    );
+  },
+  set(newValue) {
+    sliderValue.value = (
+      ((newValue * price.value) / account.value) *
+      100
+    ).toFixed(2);
+  },
 });
 </script>
 
@@ -427,11 +364,5 @@ watch(searchQuery, (newTarget) => {
 
 .record {
   margin-top: 1rem;
-}
-
-.table td,
-.table th,
-h3 {
-  color: black;
 }
 </style>

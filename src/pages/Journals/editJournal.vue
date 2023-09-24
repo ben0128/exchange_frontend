@@ -66,7 +66,7 @@ export default {
         title: this.title,
         content: this.content,
       });
-      if (res.status === "success") {
+      if (res.success === true) {
         this.$router.push("/user/tradingJournals/allJournals");
       } else {
         alert("Save failed!");
