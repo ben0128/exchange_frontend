@@ -52,7 +52,7 @@
                 </button>
               </td>
               <td>
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" @click="deleteJournal(journal.id)">
                   <span>Delete</span>
                 </button>
               </td>
@@ -95,6 +95,16 @@ async function getJournal(id) {
     journal.value = store.getters["journal/getJournal"];
     // console.log(journal.value);
     show.value = true;
+  }
+}
+
+async function deleteJournal(id) {
+  if (id === undefined) return;
+  const res = await store.dispatch("journal/deleteJournal", id );
+  if (res.success) {
+    await getAllJournals();
+  } else {
+    alert("刪除失敗");
   }
 }
 
