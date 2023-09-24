@@ -60,9 +60,12 @@ export default {
         title: this.title,
         content: this.content,
       });
-      console.log(res);
-      // 跳转回日记列表页面
-      this.$router.push("/user/tradingJournals/allJournals");
+      if (res.status === "success") {
+        this.$router.push("/user/tradingJournals/allJournals");
+      } else {
+        alert("Save failed!");
+      }
+      
     },
   },
   created() {
