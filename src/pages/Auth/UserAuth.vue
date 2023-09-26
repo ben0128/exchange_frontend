@@ -70,17 +70,10 @@
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <!-- <div class="facebook-btn mb-2" @click="onFacebookLogin">
-            <button class="btn btn-block btn-primary">
-              <i class="fab fa-facebook mr-2"></i>Facebook
-            </button>
-          </div>
-          <div class="google-btn" @click="onGoogleLogin">
-            <button class="btn btn-block btn-danger">
-              <i class="fab fa-google mr-2"></i>Google
-            </button>
-          </div> -->
-          <GoogleLogin :callback="callback" prompt/>
+          <button class="button" @click="logInWithFacebook">
+            Login with Facebook
+          </button>
+          <GoogleLogin :callback="callback" />
         </div>
         <div v-if="!checkMode">
           <a href="#" @click="changeMode">I already have a membership</a>
@@ -113,7 +106,6 @@ const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 
-// Google Login將上方GOOGLE登入的資訊回傳到後端
 const callback = async (googleUser) => {
   const res = await store.dispatch("googleLogin", {
     email: decodeCredential(googleUser.credential).email,
@@ -123,7 +115,59 @@ const callback = async (googleUser) => {
   } else {
     alert("登入失敗");
   }
-};
+}
+
+async function logInWithFacebook() {
+  console.log("Loading Facebook SDK...");
+  await loadFacebookSDK(document, "script", "facebook-jssdk");
+  console.log("Initializing Facebook SDK...");
+  await initFacebook();
+}
+
+
+async function initFacebook() {
+  console.log("Initializing Facebook SDK...");
+  return new Promise((resolve) => {
+    window.fbAsyncInit = function() {
+      window.FB.init({
+        appId: "895456664545-lc7b50ao3aub7mreacrot9n6ctafd2os.apps.googleusercontent.com",
+        cookie: true,
+        version: "v13.0"
+      });
+
+      // 在初始化成功后执行resolve
+      console.log("Facebook SDK initialized.");
+
+      // 在初始化成功后，调用登录
+      console.log("Calling window.FB.login...");
+      window.FB.login(function(response) {
+        console.log("Facebook login response:", response);
+        if (response.authResponse) {
+          alert("You are logged in & cookie set!");
+        } else {
+          alert("User cancelled login or did not fully authorize.");
+        }
+      });
+
+      resolve(); // 初始化成功后解析Promise
+    };
+  });
+}
+
+
+async function loadFacebookSDK(d, s, id) {
+  console.log("Loading Facebook SDK script...");
+  var js,
+    fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {
+    console.log("Facebook SDK script already loaded.");
+    return;
+  }
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}
 
 function changeShow(bool) {
   show.value = bool;
@@ -203,7 +247,7 @@ const checkMode = computed(() => {
   return mode.value === "Login";
 });
 
-onMounted(() => {
+onMounted(async () => {
   document.body.style.backgroundImage = `url(${bgImagePath.value})`;
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";

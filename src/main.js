@@ -27,7 +27,7 @@ app.component("base-spinner", BaseSpinner);
 app.component("base-article", BaseArticle);
 app.use(vue3GoogleLogin, {
   clientId: CLIENT_ID,
-  scope: "profile email",
+  scope: "email",
 });
 app.use(router);
 app.use(store);
