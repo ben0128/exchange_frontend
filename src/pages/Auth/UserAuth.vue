@@ -75,11 +75,10 @@
               <i class="fab fa-facebook mr-2"></i>Facebook
             </button>
           </div>
-          <div>
-            <a href="#" class="btn btn-block btn-danger">
-              <i class="fab fa-google mr-2"></i>
-              Google
-            </a>
+          <div class="google-btn" @click="onGoogleLogin">
+            <button class="btn btn-block btn-danger">
+              <i class="fab fa-google mr-2"></i>Google
+            </button>
           </div>
         </div>
         <div v-if="!checkMode">
@@ -100,7 +99,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import router from "../../router";
 import background from "../../assets/loginbackground.jpg";
-import axios from "axios";
+
 
 const bgImagePath = ref(background);
 const show = ref(false);
@@ -112,50 +111,15 @@ const checkPassword = ref("");
 const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
-const FB = window.FB;
 
-function onFacebookLogin() {
-  FB.login(
-    (response) => {
-      if (response.status === "connected") {
-        console.log("Facebook 登录成功");
-        // 获取 Facebook 用户的基本信息
-        FB.api("/me", (userData) => {
-          // 在这里可以向后端发送请求，验证用户并获取更多信息
-          const accessToken = response.authResponse.accessToken;
-          sendRequestToBackend(userData, accessToken);
-        });
-      } else {
-        console.log("Facebook 登录失败或取消");
-      }
-    },
-    { scope: "email" }
-  );
-}
-
-function sendRequestToBackend(userData, accessToken) {
-  // 构建发送给后端的数据
-  const requestData = {
-    user: userData,
-    accessToken: accessToken,
-  };
-
-  // 发送 POST 请求到后端的特定 API
-  axios
-    .post("https://exchange-frontend-tawny.vercel.app/auth/fb", requestData)
-    .then((response) => {
-      // 处理后端返回的响应数据
-      const responseData = response.data;
-      if (responseData.success) {
-        console.log("后端验证成功");
-        // 可以在这里触发其他操作，例如跳转到登录后的页面
-      } else {
-        console.log("后端验证失败");
-      }
-    })
-    .catch((error) => {
-      console.error("请求后端 API 时出错", error);
-    });
+async function onGoogleLogin() {
+  console.log('start google auth')
+  const res = await store.dispatch("googleLogin");
+  if (res.success) {
+    router.push("/");
+  } else {
+    alert("登入失敗");
+  }
 }
 
 function changeShow(bool) {
@@ -241,17 +205,6 @@ onMounted(() => {
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
-
-  // 异步加载 Facebook SDK 脚本
-  (function (d, s, id) {
-    var js,
-      fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#version=v2.3&appId=7254607447886024&xfbml=true&autoLogAppEvents=true";
-    fjs.parentNode.insertBefore(js, fjs);
-  })(document, "script", "facebook-jssdk");
 });
 
 onBeforeUnmount(() => {
