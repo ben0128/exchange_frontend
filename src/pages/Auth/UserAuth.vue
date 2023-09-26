@@ -70,14 +70,17 @@
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <a href="#" class="btn btn-block btn-primary">
-            <i class="fab fa-facebook mr-2"></i>
-            Facebook
-          </a>
-          <a href="#" class="btn btn-block btn-danger">
-            <i class="fab fa-google mr-2"></i>
-            Google
-          </a>
+          <div class="facebook-btn mb-2" @click="onFacebookLogin">
+            <button class="btn btn-block btn-primary">
+              <i class="fab fa-facebook mr-2"></i>Facebook
+            </button>
+          </div>
+          <div>
+            <a href="#" class="btn btn-block btn-danger">
+              <i class="fab fa-google mr-2"></i>
+              Google
+            </a>
+          </div>
         </div>
         <div v-if="!checkMode">
           <a href="#" @click="changeMode">I already have a membership</a>
@@ -109,19 +112,29 @@ const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 
+async function onFacebookLogin() {
+  try {
+    if (window.FB) {
+      const res = await new Promise((resolve) => {
+        window.FB.login(resolve, { scope: "public_profile,email" });
+      });
+      console.log(res);
+      if (res.authResponse) {
+        console.log("FB.login success", res);
+      } else {
+        console.log("FB.login failed", res);
+      }
+    } else {
+      console.log("FB.login failed, FB not ready");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function changeShow(bool) {
   show.value = bool;
 }
-
-const buttonText = computed(() => {
-  return mode.value === "Login" ? "Login" : "Register";
-});
-
-const description = computed(() => {
-  return mode.value === "Login"
-    ? "<strong>Login</strong> to continue"
-    : "<strong>Register</strong> a new membership";
-});
 
 function changeRememberMe() {
   rememberMe.value = !rememberMe.value;
@@ -183,6 +196,16 @@ function changeMode() {
   mode.value = mode.value === "Login" ? "Register" : "Login";
 }
 
+const buttonText = computed(() => {
+  return mode.value === "Login" ? "Login" : "Register";
+});
+
+const description = computed(() => {
+  return mode.value === "Login"
+    ? "<strong>Login</strong> to continue"
+    : "<strong>Register</strong> a new membership";
+});
+
 const checkMode = computed(() => {
   return mode.value === "Login";
 });
@@ -192,6 +215,26 @@ onMounted(() => {
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
+  if (!window.FB) {
+    // Facebook JavaScript SDK 未加载，进行加载和初始化
+    const script = document.createElement("script");
+    script.src = "https://connect.facebook.net/en_US/sdk.js";
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+    script.onload = () => {
+      // 初始化 Facebook JavaScript SDK
+      window.fbAsyncInit = function () {
+        window.FB.init({
+          appId: "7254607447886024",
+          cookie: true,
+          xfbml: true,
+          version: "v11.0",
+        });
+      };
+    };
+    document.head.appendChild(script);
+  }
 });
 
 onBeforeUnmount(() => {

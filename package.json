@@ -20,6 +20,7 @@
     "jquery": "^3.7.1",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
+    "vue-facebook-login-component": "^4.0.2",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0"
   },
