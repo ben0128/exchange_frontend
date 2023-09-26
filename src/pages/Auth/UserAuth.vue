@@ -70,9 +70,11 @@
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <button class="button" @click="logInWithFacebook">
-            Login with Facebook
-          </button>
+          <div id="fb-root">
+            <button class="button" @click="logInWithFacebook">
+              Login with Facebook
+            </button>
+          </div>
           <GoogleLogin :callback="callback" />
         </div>
         <div v-if="!checkMode">
@@ -115,58 +117,49 @@ const callback = async (googleUser) => {
   } else {
     alert("登入失敗");
   }
-}
+};
 
 async function logInWithFacebook() {
-  console.log("Loading Facebook SDK...");
-  await loadFacebookSDK(document, "script", "facebook-jssdk");
-  console.log("Initializing Facebook SDK...");
-  await initFacebook();
+  window.FB.login(function (response) {
+    if (response.authResponse) {
+      alert("You are logged in &amp; cookie set!");
+      // Now you can redirect the user or do an AJAX request to
+      // a PHP script that grabs the signed request from the cookie.
+    } else {
+      alert("User cancelled login or did not fully authorize.");
+    }
+  });
+  return false;
 }
 
-
 async function initFacebook() {
-  console.log("Initializing Facebook SDK...");
   return new Promise((resolve) => {
-    window.fbAsyncInit = function() {
+    window.fbAsyncInit = function () {
       window.FB.init({
-        appId: "895456664545-lc7b50ao3aub7mreacrot9n6ctafd2os.apps.googleusercontent.com",
-        cookie: true,
-        version: "v13.0"
+        appId: "7254607447886024",
+        cookie: true, // enable cookies to allow the server to access
+        xfbml: true, // parse social plugins on this page
+        version: "v16.0",
       });
-
-      // 在初始化成功后执行resolve
-      console.log("Facebook SDK initialized.");
-
-      // 在初始化成功后，调用登录
-      console.log("Calling window.FB.login...");
-      window.FB.login(function(response) {
-        console.log("Facebook login response:", response);
-        if (response.authResponse) {
-          alert("You are logged in & cookie set!");
-        } else {
-          alert("User cancelled login or did not fully authorize.");
-        }
-      });
-
-      resolve(); // 初始化成功后解析Promise
+      resolve();
     };
   });
 }
 
-
 async function loadFacebookSDK(d, s, id) {
-  console.log("Loading Facebook SDK script...");
-  var js,
-    fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {
-    console.log("Facebook SDK script already loaded.");
-    return;
-  }
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://connect.facebook.net/en_US/sdk.js";
-  fjs.parentNode.insertBefore(js, fjs);
+  return new Promise((resolve, reject) => {
+    let js,
+      fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+      return;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+    js.onload = resolve;
+    js.onerror = reject;
+  });
 }
 
 function changeShow(bool) {
@@ -252,6 +245,11 @@ onMounted(async () => {
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
+
+  //Q:sdk.js?hash=cf6566aa41485310de7a4a6d0b27cf0d:49  FB.login() called before FB.init().
+  //A:https://stackoverflow.com/questions/35484986/facebook-login-error-fb-login-called-before-fb-init
+  await loadFacebookSDK(document, "script", "facebook-jssdk");
+  await initFacebook();
 });
 
 onBeforeUnmount(() => {
