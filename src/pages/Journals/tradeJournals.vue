@@ -36,7 +36,6 @@
               <th>createdAt</th>
               <th>updatedAt</th>
               <th>Title</th>
-              <th>Content</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +44,6 @@
               <td>{{ journal.createdAt }}</td>
               <td>{{ journal.updatedAt }}</td>
               <td>{{ journal.title }}</td>
-              <td>{{ journal.content.substring(0, 10) }}</td>
               <td>
                 <button class="btn btn-primary" @click="getJournal(journal.id)">
                   <span>Read</span>
