@@ -118,6 +118,7 @@ async function onFacebookLogin() {
       const res = await new Promise((resolve) => {
         window.FB.login(resolve, { scope: "public_profile,email" });
       });
+      console.log(window.FB)
       console.log(res);
       if (res.authResponse) {
         console.log("FB.login success", res);
