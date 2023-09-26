@@ -70,11 +70,6 @@
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <div class="g-signin2" @click="onSignIn">
-            <button class="btn btn-block btn-primary">
-              <i class="fab fa-google mr-2"></i>Google
-            </button>
-          </div>
           <!-- <div class="facebook-btn mb-2" @click="onFacebookLogin">
             <button class="btn btn-block btn-primary">
               <i class="fab fa-facebook mr-2"></i>Facebook
@@ -85,6 +80,7 @@
               <i class="fab fa-google mr-2"></i>Google
             </button>
           </div> -->
+          <GoogleLogin :callback="callback" prompt/>
         </div>
         <div v-if="!checkMode">
           <a href="#" @click="changeMode">I already have a membership</a>
@@ -116,24 +112,7 @@ const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 
-// async function onGoogleLogin() {
-//   console.log('start google auth')
-//   const res = await store.dispatch("googleLogin");
-//   if (res.success) {
-//     router.push("/");
-//   } else {
-//     alert("登入失敗");
-//   }
-// }
-
-function onSignIn(googleUser) {
-  console.log(googleUser)
-  const profile = googleUser.getBasicProfile();
-  console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log("Name: " + profile.getName());
-  console.log("Image URL: " + profile.getImageUrl());
-  console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
+//使用GOOGLE登入
 
 function changeShow(bool) {
   show.value = bool;
