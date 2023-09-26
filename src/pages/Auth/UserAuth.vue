@@ -241,14 +241,6 @@ onMounted(() => {
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
-  window.fbAsyncInit = function () {
-    FB.init({
-      appId: "7254607447886024",
-      autoLogAppEvents: true,
-      xfbml: true,
-      version: "v18.0",
-    });
-  };
 
   // 异步加载 Facebook SDK 脚本
   (function (d, s, id) {
@@ -257,7 +249,7 @@ onMounted(() => {
     if (d.getElementById(id)) return;
     js = d.createElement(s);
     js.id = id;
-    js.src = "https://connect.facebook.net/en_US/all.js";
+    js.src = "https://connect.facebook.net/en_US/sdk.js#version=v2.2&appId=7254607447886024&xfbml=true&autoLogAppEvents=true";
     fjs.parentNode.insertBefore(js, fjs);
   })(document, "script", "facebook-jssdk");
 });
