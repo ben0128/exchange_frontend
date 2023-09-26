@@ -80,7 +80,7 @@ export default {
   },
   async googleLogin(_, payload) {
     try {
-      const res = await axios.get(
+      const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/auth/google",
         {
           email: payload.email,
