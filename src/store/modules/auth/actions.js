@@ -78,14 +78,17 @@ export default {
       return { success: false, message: "獲取用戶資料失敗" };
     }
   },
-  async googleLogin() {
+  async googleLogin(_, payload) {
     try {
       const res = await axios.get(
-        "https://exchange-backend-kt8e.onrender.com/api/auth/google"
+        "https://exchange-backend-kt8e.onrender.com/api/auth/google",
+        {
+          email: payload.email,
+        }
       );
       console.log(res)
       if (res.status === 400) {
-        throw new Error(res.data.message);
+        return { success: false, message: "登入發生錯誤" };
       }
       if (res.status === 200) {
         localStorage.setItem("token", res.data.token);

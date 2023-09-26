@@ -100,6 +100,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import router from "../../router";
 import background from "../../assets/loginbackground.jpg";
+import { decodeCredential } from "vue3-google-login";
 
 const bgImagePath = ref(background);
 const show = ref(false);
@@ -112,7 +113,17 @@ const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 
-//使用GOOGLE登入
+// Google Login將上方GOOGLE登入的資訊回傳到後端
+const callback = async (googleUser) => {
+  const res = await store.dispatch("googleLogin", {
+    email: decodeCredential(googleUser.credential).email,
+  });
+  if (res.success) {
+    router.push("/");
+  } else {
+    alert("登入失敗");
+  }
+};
 
 function changeShow(bool) {
   show.value = bool;
