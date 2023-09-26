@@ -112,6 +112,7 @@ const checkPassword = ref("");
 const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
+const FB = window.FB;
 
 function onFacebookLogin() {
   FB.login(
