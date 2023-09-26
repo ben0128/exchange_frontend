@@ -249,7 +249,7 @@ onMounted(() => {
     if (d.getElementById(id)) return;
     js = d.createElement(s);
     js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js#version=v2.2&appId=7254607447886024&xfbml=true&autoLogAppEvents=true";
+    js.src = "https://connect.facebook.net/en_US/sdk.js#version=v2.3&appId=7254607447886024&xfbml=true&autoLogAppEvents=true";
     fjs.parentNode.insertBefore(js, fjs);
   })(document, "script", "facebook-jssdk");
 });
