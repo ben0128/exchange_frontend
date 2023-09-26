@@ -139,7 +139,7 @@ async function initFacebook() {
         appId: "7254607447886024",
         cookie: true, // enable cookies to allow the server to access
         xfbml: true, // parse social plugins on this page
-        version: "v16.0",
+        version: "v18.0",
       });
       resolve();
     };
