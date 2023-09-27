@@ -70,12 +70,14 @@
         </form>
         <div class="social-auth-links text-center">
           <p>- OR -</p>
-          <div id="fb-root">
-            <button class="button" @click="logInWithFacebook">
-              Login with Facebook
-            </button>
+          <div class="auth-way">
+            <div id="fb-root">
+              <button class="btn btn-primary" @click="logInWithFacebook">
+                <i class="fab fa-facebook mr-2"></i>FB
+              </button>
+            </div>
+            <GoogleLogin :callback="callback"/>
           </div>
-          <GoogleLogin :callback="callback" />
         </div>
         <div v-if="!checkMode">
           <a href="#" @click="changeMode">I already have a membership</a>
@@ -108,6 +110,7 @@ const store = useStore();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 
+//登入google,將拿到的EMAIL傳到後端
 const callback = async (googleUser) => {
   const res = await store.dispatch("googleLogin", {
     email: decodeCredential(googleUser.credential).email,
@@ -121,6 +124,7 @@ const callback = async (googleUser) => {
 
 async function logInWithFacebook() {
   window.FB.login(function (response) {
+    console.log(response);
     if (response.authResponse) {
       alert("You are logged in &amp; cookie set!");
       // Now you can redirect the user or do an AJAX request to
@@ -246,8 +250,6 @@ onMounted(async () => {
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
 
-  //Q:sdk.js?hash=cf6566aa41485310de7a4a6d0b27cf0d:49  FB.login() called before FB.init().
-  //A:https://stackoverflow.com/questions/35484986/facebook-login-error-fb-login-called-before-fb-init
   await loadFacebookSDK(document, "script", "facebook-jssdk");
   await initFacebook();
 });
@@ -295,4 +297,10 @@ onBeforeUnmount(() => {
 .col-8 {
   margin-top: 5px;
 }
+
+.auth-way {
+  display: flex;
+  justify-content: space-around;
+}
+
 </style>

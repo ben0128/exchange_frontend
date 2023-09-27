@@ -94,8 +94,6 @@ export default {
         }
       });
       context.commit("getOrders", [pendingOrderArr, completedOrderArr]);
-      // console.log(context.getters.getPendingOrders);
-      // console.log(context.getters.getCompletedOrders);
       return { success: true };
     } catch (error) {
       return { success: false };

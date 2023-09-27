@@ -18,7 +18,6 @@ const BaseArticle = defineAsyncComponent(() =>
 );
 
 const app = createApp(App);
-const CLIENT_ID = "895456664545-lc7b50ao3aub7mreacrot9n6ctafd2os.apps.googleusercontent.com"
 app.component("base-dialog", BaseDialog);
 app.component("base-card", BaseCard);
 app.component("base-button", BaseButton);
@@ -26,7 +25,7 @@ app.component("base-input", BaseInput);
 app.component("base-spinner", BaseSpinner);
 app.component("base-article", BaseArticle);
 app.use(vue3GoogleLogin, {
-  clientId: CLIENT_ID,
+  clientId: process.env.VUE_APP_CLIENTID,
   scope: "email",
 });
 app.use(router);

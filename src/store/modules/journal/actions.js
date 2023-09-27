@@ -30,7 +30,6 @@ export default {
       const journal = await context.state.journals.find(
         (journal) => journal.id === payload.id
       );
-      // console.log(journal)
       if (journal) {
         context.commit("getOneJournal", journal);
         return { success: true };
