@@ -10,16 +10,25 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
 import favoriteTarget from "../../components/charts/favoriteTarget.vue";
+import { useStore } from "vuex";
 
-const likes = [
-  { _id: 1, targetName: "AAPL" },
-  { _id: 2, targetName: "GOOG" },
-  { _id: 3, targetName: "AMZN" },
-  { _id: 4, targetName: "TSLA" },
-  { _id: 5, targetName: "MSFT" },
-  { _id: 6, targetName: "FB" }
-];
+const store = useStore();
+const likes = ref([]);
+async function getAllLikes() {
+  const res = await store.dispatch("like/getAllLikes");
+  if (res.success) {
+    likes.value = store.getters["like/getAllLikes"];
+    console.log(likes.value);
+  } else {
+    alert("取得收藏清單失敗");
+  }
+}
+
+onMounted(async () => {
+  await getAllLikes();
+});
 </script>
 
 <style scoped>

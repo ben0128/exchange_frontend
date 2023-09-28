@@ -1,10 +1,9 @@
 <template>
   <div class="tradingview-widget-container">
-    <div v-bind:id="wIndexId" class="widget-index">
-      <button class="icon-back" @click="deleteLike(wIndexId)">
-        <i class="fa-regular fa-delete-left fa-2xl" style="#000000"></i>
-      </button>
-    </div>
+    <div v-bind:id="wIndexId" class="widget-index"></div>
+    <button class="icon-back" @click="deleteLike(wIndexId)">
+      <i class="fa-regular fa-delete-left fa-2xl" style="#000000"></i>
+    </button>
   </div>
 </template>
 
@@ -38,11 +37,13 @@ function loadTradingViewWidget(idStr) {
       }`;
 
   // 将脚本插入到 DOM 中
-  document.querySelector(`#${idStr}`).appendChild(script);
+  const itemId = "#" + idStr.toString();
+  console.log(itemId);
+  document.querySelector(itemId).appendChild(script);
 }
 
-function deleteLike(idStr) {
-  store.dispatch("user/deleteLike", idStr);
+async function deleteLike(idStr) {
+  await store.dispatch("like/deleteLike", idStr);
 }
 
 onMounted(() => {
@@ -57,9 +58,6 @@ onMounted(() => {
 }
 .tradingview-widget-container {
   margin: 1rem auto;
-}
-
-.widget-index {
   position: relative;
 }
 
