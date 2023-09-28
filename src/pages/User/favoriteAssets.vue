@@ -2,9 +2,9 @@
   <div class="target-list">
     <favorite-target
       v-for="like in likes"
-      :key="like.id"
+      :key="like._id"
       :targetName="like.targetName"
-      :windex="like.id"
+      :windex="like._id"
     ></favorite-target>
   </div>
 </template>
@@ -13,12 +13,12 @@
 import favoriteTarget from "../../components/charts/favoriteTarget.vue";
 
 const likes = [
-  { id: 1, targetName: "AAPL" },
-  { id: 2, targetName: "GOOG" },
-  { id: 3, targetName: "AMZN" },
-  { id: 4, targetName: "TSLA" },
-  { id: 5, targetName: "MSFT" },
-  { id: 6, targetName: "FB" }
+  { _id: 1, targetName: "AAPL" },
+  { _id: 2, targetName: "GOOG" },
+  { _id: 3, targetName: "AMZN" },
+  { _id: 4, targetName: "TSLA" },
+  { _id: 5, targetName: "MSFT" },
+  { _id: 6, targetName: "FB" }
 ];
 </script>
 

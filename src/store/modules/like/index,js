@@ -1,0 +1,15 @@
+import likeActions from "./actions.js";
+import likeMutations from "./mutations.js";
+import likeGetters from "./getters.js";
+
+const likeModule = {
+  namespaced: true,
+  state: {
+    likes: [],
+  },
+  mutations: likeMutations,
+  actions: likeActions,
+  getters: likeGetters,
+};
+
+export default likeModule;
