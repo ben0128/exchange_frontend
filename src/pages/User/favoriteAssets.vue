@@ -35,7 +35,6 @@ onMounted(async () => {
 .target-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
 }
 
 favorite-target {

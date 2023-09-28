@@ -13,8 +13,17 @@
             <button type="submit" @click.prevent="searchStock(searchQuery)">
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
-            <button class="heartButton" v-if="target" @click.prevent="addLike">
-              <i class="fa-regular fa-heart"></i>
+            <button
+              class="heartButton"
+              v-if="target"
+              @mouseover="isHovered = true"
+              @mouseout="isHovered = false"
+              @click.prevent="addLike"
+            >
+              <i
+                :class="isHovered ? 'fa-solid' : 'fa-regular'"
+                class="heart-icon fa-heart"
+              ></i>
             </button>
           </div>
         </div>
@@ -59,14 +68,26 @@ const trimmedQuery = ref("");
 const pendingOrders = ref([]);
 const completedOrders = ref([]);
 
+const isHovered = ref(false);
+
 async function searchStock(keyword) {
   target.value = "";
   trimmedQuery.value = keyword.trim().toUpperCase();
   if (trimmedQuery.value) {
+    await isLiked();
     target.value = trimmedQuery.value;
   } else {
     target.value = "";
     searchQuery.value = "";
+  }
+}
+
+async function isLiked() {
+  const res = await store.dispatch("like/isLiked", trimmedQuery.value);
+  if (res.success) {
+    isHovered.value = true;
+  } else {
+    isHovered.value = false;
   }
 }
 
@@ -118,5 +139,32 @@ onMounted(async () => {
 
 .heartButton {
   margin-left: 0.5rem;
+}
+
+.heart-icon {
+  color: red; /* 默认颜色，您可以更改为所需的颜色 */
+  transition: color 0.3s ease-in-out;
+}
+
+/* 实心爱心图标样式 */
+.fa-solid {
+  /* 悬浮时的样式，例如稍微晃动和旋转 */
+  animation: heartBeat 0.5s ease infinite;
+}
+
+/* 悬浮时的样式，例如稍微晃动 */
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.heartButton {
+  /* 去除邊框 */
+  border: none;
+  border-radius: 10%;
 }
 </style>

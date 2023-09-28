@@ -6,6 +6,7 @@ const likeModule = {
   namespaced: true,
   state: {
     likes: [],
+    isLiked: false,
   },
   mutations: likeMutations,
   actions: likeActions,
