@@ -23,6 +23,7 @@
               <i
                 :class="isHovered ? 'fa-solid' : 'fa-regular'"
                 class="heart-icon fa-heart"
+                v-if="isShow"
               ></i>
             </button>
           </div>
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import tradingTarget from "../../components/charts/tradingTarget.vue";
 import tradeOrder from "../../components/trade/tradeOrder.vue";
@@ -69,12 +70,13 @@ const pendingOrders = ref([]);
 const completedOrders = ref([]);
 
 const isHovered = ref(false);
+const isShow = ref(false);
 
 async function searchStock(keyword) {
   target.value = "";
   trimmedQuery.value = keyword.trim().toUpperCase();
   if (trimmedQuery.value) {
-    await isLiked();
+    await isLiked(trimmedQuery.value);
     target.value = trimmedQuery.value;
   } else {
     target.value = "";
@@ -82,8 +84,17 @@ async function searchStock(keyword) {
   }
 }
 
-async function isLiked() {
-  const res = await store.dispatch("like/isLiked", trimmedQuery.value);
+watch(
+  () => trimmedQuery.value,
+  async () => {
+    await isLiked(trimmedQuery.value);
+  }
+);
+
+async function isLiked(targetName) {
+  const res = await store.dispatch("like/isLiked", targetName);
+  isShow.value = true
+  console.log(store.getters["like/getIsLiked"])
   if (res.success) {
     isHovered.value = true;
   } else {

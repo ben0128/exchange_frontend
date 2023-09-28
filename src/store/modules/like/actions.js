@@ -77,11 +77,9 @@ export default {
   async isLiked(context, payload) {
     try {
       const res = await axios.get(
-        "https://exchange-backend-kt8e.onrender.com/api/targets",
+        "https://exchange-backend-kt8e.onrender.com/api/targets/isLiked",
         {
-          target: payload,
-        },
-        {
+          params: { target: payload },
           headers: {
             Authorization: `Bearer ${
               localStorage.getItem("token") || sessionStorage.getItem("token")
@@ -89,13 +87,9 @@ export default {
           },
         }
       );
-      //isLiked = true
-      if (res.status === 400) {
-        return { success: false };
-      }
       if (res.status === 200) {
-        context.commit("isLiked", res.data.isLiked);
-        return { success: true };
+        context.commit("isLiked", res.data);
+        return { success: res.data };
       }
     } catch (error) {
       return { success: false };
