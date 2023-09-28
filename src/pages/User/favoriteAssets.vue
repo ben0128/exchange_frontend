@@ -16,11 +16,11 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const likes = ref([]);
+
 async function getAllLikes() {
   const res = await store.dispatch("like/getAllLikes");
   if (res.success) {
     likes.value = store.getters["like/getAllLikes"];
-    console.log(likes.value);
   } else {
     alert("取得收藏清單失敗");
   }

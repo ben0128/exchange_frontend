@@ -13,6 +13,9 @@
             <button type="submit" @click.prevent="searchStock(searchQuery)">
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
+            <button class="heartButton" v-if="target" @click.prevent="addLike">
+              <i class="fa-regular fa-heart"></i>
+            </button>
           </div>
         </div>
       </form>
@@ -67,6 +70,15 @@ async function searchStock(keyword) {
   }
 }
 
+async function addLike() {
+  const res = await store.dispatch("like/addLike", trimmedQuery.value);
+  if (res.success) {
+    alert("加入收藏成功");
+  } else {
+    alert("加入收藏失敗");
+  }
+}
+
 async function setAllOrders() {
   await store.dispatch("order/getAllOrders");
   pendingOrders.value = [...store.getters["order/getPendingOrders"]];
@@ -102,5 +114,9 @@ onMounted(async () => {
 
 .record {
   margin-top: 1rem;
+}
+
+.heartButton {
+  margin-left: 0.5rem;
 }
 </style>

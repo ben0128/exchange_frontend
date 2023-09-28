@@ -43,7 +43,6 @@ async function deleteLike(idStr) {
   const res = await store.dispatch("like/deleteLike", idStr);
   console.log(res)
   if (res.success) {
-    alert("刪除成功");
     location.reload();
   } else {
     alert("刪除失敗");

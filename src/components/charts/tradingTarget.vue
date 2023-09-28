@@ -9,9 +9,7 @@ import { onMounted, defineProps } from "vue";
 
 const props = defineProps(["target"]);
 const widgetId = "technical-analysis-chart-demo";
-onMounted(() => {
-  loadTradingViewScript();
-});
+
 function loadTradingViewScript() {
   if (document.getElementById(widgetId) && "TradingView" in window) {
     new window.TradingView.widget({
@@ -40,4 +38,8 @@ function loadTradingViewScript() {
     });
   }
 }
+
+onMounted(() => {
+  loadTradingViewScript();
+});
 </script>
