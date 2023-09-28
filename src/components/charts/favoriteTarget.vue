@@ -1,9 +1,8 @@
 <template>
   <div class="tradingview-widget-container">
-    <div v-bind:id="wIndexId" class="widget-index"></div>
-    <button class="icon-back" @click="deleteLike(wIndexId)">
-      <i class="fa-regular fa-delete-left fa-2xl" style="#000000"></i>
-    </button>
+    <div v-bind:id="wIndexId" class="widget-index">
+      <button class="icon-back" @click="deleteLike(wIndexId)">X</button>
+    </div>
   </div>
 </template>
 
@@ -13,10 +12,10 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const props = defineProps(["windex", "targetName"]);
+const props = defineProps(["wIndex", "targetName"]);
 
 const wIndexId = computed(() => {
-  return props.windex;
+  return `widget-index-${props.wIndex}`;
 });
 
 function loadTradingViewWidget(idStr) {
@@ -37,9 +36,7 @@ function loadTradingViewWidget(idStr) {
       }`;
 
   // 将脚本插入到 DOM 中
-  const itemId = "#" + idStr.toString();
-  console.log(itemId);
-  document.querySelector(itemId).appendChild(script);
+  document.querySelector(`#${idStr}`).appendChild(script);
 }
 
 async function deleteLike(idStr) {
@@ -64,12 +61,40 @@ onMounted(() => {
 .icon-back {
   position: absolute;
   top: 0.2rem;
-  right: 0.3rem;
+  right: 0.2rem;
   z-index: 10;
-  /* 跟圖表背景一樣 */
-  background: #1f1f1f;
+  /* 顏色跟圖表一樣 */
+  background-color: #1d1d1d;
+  color: #ffffff; /* 文本颜色 */
+  border: none; /* 去掉边框 */
+  border-radius: 5px; /* 圆角 */
+  cursor: pointer; /* 鼠标样式 */
+  font-size: 20px; /* 字体大小 */
   /* 大一點; */
   width: 2rem;
-  height: 2rem;
+  height: 2rem; 
+  transition: transform 0.2s; /* 添加过渡效果 */
+}
+
+.icon-back:hover {
+  background-color: #cc0000; /* 鼠标悬停时的背景颜色 */
+  transform: translateY(-2px); /* 向上移动2像素 */
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px); /* 向左移动2像素 */
+  }
+  50% {
+    transform: translateX(2px); /* 向右移动2像素 */
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 </style>

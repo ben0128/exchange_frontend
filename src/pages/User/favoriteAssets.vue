@@ -4,7 +4,7 @@
       v-for="like in likes"
       :key="like._id"
       :targetName="like.targetName"
-      :windex="like._id"
+      :wIndex="like._id"
     ></favorite-target>
   </div>
 </template>
