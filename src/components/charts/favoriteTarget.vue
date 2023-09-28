@@ -1,7 +1,7 @@
 <template>
   <div class="tradingview-widget-container">
     <div v-bind:id="wIndexId" class="widget-index">
-      <button class="icon-back" @click="deleteLike(wIndexId)">X</button>
+      <button class="icon-back" @click="deleteLike(props.wIndex)">X</button>
     </div>
   </div>
 </template>
@@ -40,7 +40,14 @@ function loadTradingViewWidget(idStr) {
 }
 
 async function deleteLike(idStr) {
-  await store.dispatch("like/deleteLike", idStr);
+  const res = await store.dispatch("like/deleteLike", idStr);
+  console.log(res)
+  if (res.success) {
+    alert("刪除成功");
+    location.reload();
+  } else {
+    alert("刪除失敗");
+  }
 }
 
 onMounted(() => {

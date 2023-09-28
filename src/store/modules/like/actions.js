@@ -26,11 +26,9 @@ export default {
   },
   async deleteLike(_, payload) {
     try {
+      const url = `https://exchange-backend-kt8e.onrender.com/api/targets/${payload}`;
       const res = await axios.delete(
-        "https://exchange-backend-kt8e.onrender.com/api/targets",
-        {
-          id: payload._id,
-        },
+        url,
         {
           headers: {
             Authorization: `Bearer ${
@@ -38,9 +36,9 @@ export default {
             }`,
           },
         }
-      );
+      );  
       console.log(res);
-      if (res.status === 400) {
+      if (res.status === 401) {
         return { success: false };
       }
       if (res.status === 200) {
