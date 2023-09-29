@@ -24,12 +24,13 @@ export default {
       return { success: false };
     }
   },
-  async addLike(_, payload) {
+  async changeLike(_, payload) {
     try {
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/targets",
         {
-          targetName: payload,
+          targetName: payload.target,
+          isLiked: payload.isLiked,
         },
         {
           headers: {
@@ -74,7 +75,7 @@ export default {
       return { success: false };
     }
   },
-  async isLiked(context, payload) {
+  async getIsLiked(context, payload) {
     try {
       const res = await axios.get(
         "https://exchange-backend-kt8e.onrender.com/api/targets/isLiked",
@@ -88,8 +89,10 @@ export default {
         }
       );
       if (res.status === 200) {
-        context.commit("isLiked", res.data);
+        context.commit("setIsLiked", res.data);
         return { success: res.data };
+      } else {
+        return { success: false };
       }
     } catch (error) {
       return { success: false };

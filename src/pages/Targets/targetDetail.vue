@@ -15,17 +15,14 @@
             </button>
             <button
               class="heartButton"
-              v-if="target"
+              v-if="isShow"
               @mouseover="isHovered = true"
               @mouseout="isHovered = false"
-              @click.prevent="addLike"
+              @click.prevent="changeLike"
             >
               <i
-                :class="[
-                  'fa-heart',
-                  isHovered || isLiked ? 'fa-solid' : 'fa-regular',
-                ]"
-                class="heart-icon"
+                :class="isHovered || isLiked ? 'fa-solid' : 'fa-regular'"
+                class="heart-icon fa-heart"
               ></i>
             </button>
           </div>
@@ -56,7 +53,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import tradingTarget from "../../components/charts/tradingTarget.vue";
 import tradeOrder from "../../components/trade/tradeOrder.vue";
@@ -73,43 +70,30 @@ const completedOrders = ref([]);
 
 const isHovered = ref(false);
 const isShow = ref(false);
+const isLiked = ref(null);
 
 async function searchStock(keyword) {
   target.value = "";
   trimmedQuery.value = keyword.trim().toUpperCase();
   if (trimmedQuery.value) {
-    await isLiked(trimmedQuery.value);
+    await store.dispatch("like/getIsLiked", trimmedQuery.value);
+    isShow.value = true;
+    isLiked.value = store.getters["like/getIsLiked"];
     target.value = trimmedQuery.value;
   } else {
     target.value = "";
     searchQuery.value = "";
   }
+  console.log(isLiked.value)
 }
 
-watch(
-  () => trimmedQuery.value,
-  async () => {
-    await isLiked(trimmedQuery.value);
-  }
-);
-
-async function isLiked(targetName) {
-  const res = await store.dispatch("like/isLiked", targetName);
-  isShow.value = true;
-  if (res.success) {
-    isHovered.value = true;
-  } else {
-    isHovered.value = false;
-  }
-}
-
-async function addLike() {
-  const res = await store.dispatch("like/addLike", trimmedQuery.value);
-  if (res.success) {
-    alert("加入收藏成功");
-  } else {
-    alert("加入收藏失敗");
-  }
+async function changeLike() {
+  isLiked.value = !isLiked.value;
+  console.log(isLiked.value)
+  await store.dispatch("like/changeLike", {
+    target: trimmedQuery.value,
+    isLiked: isLiked.value,
+  });
 }
 
 async function setAllOrders() {

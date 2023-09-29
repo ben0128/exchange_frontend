@@ -5,7 +5,7 @@ export default {
       targetName: target.targetName,
     })
   )},
-  isLiked(state, payload) {
+  setIsLiked(state, payload) {
     state.isLiked = payload;
   }
 }
