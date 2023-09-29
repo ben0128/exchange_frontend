@@ -4,7 +4,7 @@ import formatDate from "../../../../utills/formatDate";
 export default {
   async addMarketOrder(_, payload) {
     try {
-      // console.log(payload)
+      console.log(payload)
       const res = await axios.post(
         "https://exchange-backend-kt8e.onrender.com/api/orders/marketOrder",
         {
@@ -24,7 +24,7 @@ export default {
       if (res.status === 400) {
         return { success: false };
       }
-      if (res.status === 200) {
+      if (res.status === 201) {
         return { success: true };
       }
     } catch (error) {
@@ -51,7 +51,7 @@ export default {
           },
         }
       );
-      // console.log(res)
+      console.log(res)
       if (res.status === 400) {
         throw new Error(res.data.message);
       }

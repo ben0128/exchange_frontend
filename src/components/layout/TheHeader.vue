@@ -55,78 +55,27 @@
           <span class="badge badge-danger navbar-badge">3</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img
-                src=""
-                alt="User Avatar"
-                class="img-size-50 mr-3 img-circle"
-              />
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"
-                    ><i class="fas fa-star"></i
-                  ></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted">
-                  <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                </p>
+          <div class="message-list" v-for="item in items" :key="item.id">
+            <a href="#" class="dropdown-item">
+              <!-- Message Start -->
+              <div class="media">
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    {{ item.title }}
+                    <span class="float-right text-sm text-danger"
+                      ><i class="fas fa-star"></i
+                    ></span>
+                  </h3>
+                  <p class="text-sm">{{ item.content }}</p>
+                  <p class="text-sm text-muted">
+                    <i class="far fa-clock mr-1"></i> {{ item.time }}
+                  </p>
+                </div>
               </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img
-                src=""
-                alt="User Avatar"
-                class="img-size-50 img-circle mr-3"
-              />
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"
-                    ><i class="fas fa-star"></i
-                  ></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted">
-                  <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                </p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img
-                src=""
-                alt="User Avatar"
-                class="img-size-50 img-circle mr-3"
-              />
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"
-                    ><i class="fas fa-star"></i
-                  ></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted">
-                  <i class="far fa-clock mr-1"></i> 4 Hours Ago
-                </p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
+              <!-- Message End -->
+            </a>
+            <div class="dropdown-divider"></div>
+          </div>
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
@@ -134,57 +83,79 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          <span class="badge badge-warning navbar-badge">13</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
+          <span class="dropdown-header">13 Notifications</span>
+          <div class="alert-list" v-for="alert in alerts" :key="alert.id">
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <p v-html="alert.icon"></p> {{ alert.title }}
+              <span class="float-right text-muted text-sm">{{
+                alert.time
+              }}</span>
+            </a>
+          </div>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer"
             >See All Notifications</a
           >
         </div>
       </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          data-widget="control-sidebar"
-          data-slide="true"
-          href="#"
-          role="button"
-          ><i class="fas fa-th-large"></i
-        ></a>
-      </li>
     </ul>
   </nav>
 </template>
 
-<script>
-export default {
-  emits: ["showSidebar"],
-  setup(_, context) {
-    function toggleSidebar() {
-      context.emit("showSidebar");
-    }
-    return {
-      toggleSidebar,
-    };
+<script setup>
+import { defineEmits } from "vue";
+
+const emits = defineEmits(["showSidebar"]);
+
+const items = [
+  {
+    id: 1,
+    title: "AAPL",
+    content: "iPhone 15 Pro過熱全因台積電3奈米？",
+    time: "4 hours ago",
   },
-};
+  {
+    id: 2,
+    title: "TSLA",
+    content: "特斯拉釋出有關Optimus機器人的更新，展示其辨識思考與平衡能力",
+    time: "10 hours ago",
+  },
+  {
+    id: 3,
+    title: "NVDA",
+    content: "傳NVIDIA H100 GPU 緊缺問題有望2025 年緩解",
+    time: "4 hours ago",
+  },
+];
+
+const alerts = [
+  {
+    id: 1,
+    icon: '<i class="fas fa-envelope mr-2"></i>',
+    title: "5 new messages",
+    time: "5 mins",
+  },
+  {
+    id: 2,
+    icon: '<i class="fas fa-newspaper mr-2"></i>',
+    title: "6 news",
+    time: "Today",
+  },
+  {
+    id: 3,
+    icon: '<i class="fas fa-money-bill-trend-up mr-2"></i>',
+    title: "2 new price alerts",
+    time: "Yesterday",
+  }
+]
+
+function toggleSidebar() {
+  emits("showSidebar");
+}
 </script>
 <style scoped>
 .main-header {

@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="journal in journals" :key="journal.id">
+            <tr v-for="(journal, index) in journals" :key="journal.id" :class="{'even-row': index % 2 === 0, 'odd-row': index % 2 !== 0}">
               <td>{{ journal.no }}</td>
               <td>{{ journal.createdAt }}</td>
               <td>{{ journal.updatedAt }}</td>
@@ -116,5 +116,20 @@ onMounted(() => {
 .table th,
 h3 {
   color: black;
+}
+
+.card-title {
+  font-weight: bold;
+  /* 垂直置中 */
+  line-height: 2.5;
+  /* 水平置中 */
+}
+
+.even-row {
+  background-color: #f2f2f2; /* 白色 */
+}
+
+.odd-row {
+  background-color: #e0e0e0; /* 灰色 */
 }
 </style>

@@ -114,7 +114,8 @@
             <p id="sliderValue">{{ sliderValue }}% Available Balance</p>
             <p id="sliderUSDValue">{{ totalValue }}USD</p>
           </div>
-          <button type="submit" class="btn btn-primary col-12">Buy</button>
+          <button type="submit" class="btn btn-primary col-12" v-if="activeOrderType === 'buy'">BUY</button>
+          <button type="submit" class="btn btn-danger col-12" v-else>SELL</button>
         </form>
       </div>
     </div>
@@ -148,7 +149,7 @@ async function changeActiveTradeButton(button) {
   price.value = 0;
   if (button === "market") {
     const res = await store.dispatch("target/getTargetPrice", {
-      target: props.trimmedQuery.value,
+      target: props.trimmedQuery,
     });
     if (res.success) {
       const targetPrice = store.getters["target/getTargetPrice"];
@@ -164,18 +165,19 @@ async function submitForm() {
   if (activeTradeButton.value === "market") {
     // console.log(shares)
     res = await store.dispatch("order/addMarketOrder", {
-      targetName: props.target.value,
+      targetName: props.target,
       type: activeOrderType.value,
       shares: shares.value,
     });
   } else {
     res = await store.dispatch("order/addLimitOrder", {
-      targetName: props.target.value,
+      targetName: props.target,
       type: activeOrderType.value,
       shares: shares.value,
       price: price.value,
     });
   }
+  console.log(res)
   if (res.success) {
     shares.value = 0;
     totalValue.value = 0;
