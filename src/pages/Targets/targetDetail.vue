@@ -21,9 +21,11 @@
               @click.prevent="addLike"
             >
               <i
-                :class="isHovered ? 'fa-solid' : 'fa-regular'"
-                class="heart-icon fa-heart"
-                v-if="isShow"
+                :class="[
+                  'fa-heart',
+                  isHovered || isLiked ? 'fa-solid' : 'fa-regular',
+                ]"
+                class="heart-icon"
               ></i>
             </button>
           </div>
@@ -93,8 +95,7 @@ watch(
 
 async function isLiked(targetName) {
   const res = await store.dispatch("like/isLiked", targetName);
-  isShow.value = true
-  console.log(store.getters["like/getIsLiked"])
+  isShow.value = true;
   if (res.success) {
     isHovered.value = true;
   } else {
@@ -165,7 +166,8 @@ onMounted(async () => {
 
 /* 悬浮时的样式，例如稍微晃动 */
 @keyframes heartBeat {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
