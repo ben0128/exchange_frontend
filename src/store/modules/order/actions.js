@@ -99,4 +99,30 @@ export default {
       return { success: false };
     }
   },
+  async deleteOrder(_, payload) {
+    try {
+      console.log(payload)
+      const url = `https://exchange-backend-kt8e.onrender.com/api/orders/${payload}`;
+      const res = await axios.delete(
+        url,
+        {
+          headers: {
+            Authorization: `Bearer ${
+              localStorage.getItem("token") || sessionStorage.getItem("token")
+            }`,
+          },
+        }
+      );
+      console.log(res);
+      if (res.status === 400) {
+        return { success: false };
+      }
+      if (res.status === 200) {
+        return { success: true };
+      }
+    } catch (error) {
+      console.error(error);
+      return { success: false };
+    }
+  }
 };

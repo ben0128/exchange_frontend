@@ -25,15 +25,16 @@ function loadTradingViewWidget(idStr) {
   script.src =
     "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
   script.async = true;
-  // 定義 TradingView Widget 的設定
+  // 定義 TradingView Widget 的設定顯示當日行情
   script.innerHTML = `{
-        "symbol": "${props.targetName}",
-        "width": "100%",
-        "colorTheme": "dark",
-        "hideLogo": true,
-        "isTransparent": false,
-        "locale": "en"
-      }`;
+    "symbol": "${props.targetName}",
+    "width": "100%",
+    "colorTheme": "dark",
+    "hideLogo": true,
+    "dateRange": "1D",
+    "isTransparent": false,
+    "locale": "en"
+  }`;
 
   // 将脚本插入到 DOM 中
   document.querySelector(`#${idStr}`).appendChild(script);

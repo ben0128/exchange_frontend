@@ -140,6 +140,7 @@ const props = defineProps({
   trimmedQuery: String,
   target: String,
 });
+
 function changeActiveOrderButton(button) {
   activeOrderType.value = button;
 }

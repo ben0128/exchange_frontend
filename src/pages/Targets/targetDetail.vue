@@ -43,10 +43,11 @@
       <trade-order
         :orderArr="pendingOrders"
         orderTitle="Unfilled Orders"
+        :handleButtonClick="handleButtonClick"
       ></trade-order>
       <trade-order
         :orderArr="completedOrders"
-        orderTitle="Trade History"
+        orderTitle="Trade History" 
       ></trade-order>
     </div>
   </div>
@@ -98,8 +99,14 @@ async function changeLike() {
 
 async function setAllOrders() {
   await store.dispatch("order/getAllOrders");
-  pendingOrders.value = [...store.getters["order/getPendingOrders"]];
-  completedOrders.value = [...store.getters["order/getCompletedOrders"]];
+  // 更新 pendingOrders 和 completedOrders 内部的值
+  pendingOrders.value.push(...store.getters["order/getPendingOrders"]);
+  completedOrders.value.push(...store.getters["order/getCompletedOrders"]);
+}
+
+async function handleButtonClick(id) {
+  await store.dispatch("order/deleteOrder", id);
+  pendingOrders.value = pendingOrders.value.filter((order) => order.id !== id);
 }
 
 onMounted(async () => {

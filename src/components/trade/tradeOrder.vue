@@ -17,13 +17,7 @@
       <table class="table table-head-fixed text-nowrap">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Target</th>
-            <th>Type</th>
-            <th>Shares</th>
-            <th>Price(USD)</th>
-            <th>TotalValue(USD)</th>
+            <th v-for="item in items" :key="item.name">{{ item.name }}</th>
           </tr>
         </thead>
         <tbody>
@@ -50,15 +44,21 @@
             </td>
             <td>{{ order.shares }}</td>
             <td>{{ order.price }}</td>
-            <!-- 取到小數點後兩位 -->
             <td>{{ (order.shares * order.price).toFixed(2) }}</td>
             <td>
-              <button class="btn btn-primary" v-if="orderTitle === 'Unfilled Orders'">
+              <button
+                class="btn btn-primary"
+                v-if="orderTitle === 'Unfilled Orders'"
+              >
                 <span>Edit</span>
               </button>
             </td>
             <td>
-              <button class="btn btn-danger" v-if="orderTitle === 'Unfilled Orders'">
+              <button
+                class="btn btn-danger"
+                v-if="orderTitle === 'Unfilled Orders'"
+                @click="handleButtonClick(order.id)"
+              >
                 <span>Delete</span>
               </button>
             </td>
@@ -75,7 +75,22 @@ import { defineProps } from "vue";
 const props = defineProps({
   orderArr: Array,
   orderTitle: String,
+  handleButtonClick: Function,
 });
+
+const items = [
+  { name: "Order ID" },
+  { name: "Date" },
+  { name: "Target" },
+  { name: "Type" },
+  { name: "Shares" },
+  { name: "Price" },
+  { name: "Total" },
+];
+
+function handleButtonClick(id) {
+  props.handleButtonClick(id);
+}
 </script>
 
 <style scoped>

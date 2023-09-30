@@ -12,9 +12,6 @@
           ><i class="fas fa-bars"></i
         ></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Home</a>
-      </li>
       <li class="nav-item dropdown">
         <a
           class="nav-link dropdown-toggle"
@@ -28,18 +25,10 @@
           Markets
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <router-link class="dropdown-item" to="/markets/allMarkets"
-            >All Markets</router-link
-          >
-          <router-link class="dropdown-item" to="/markets/taiwanMarket"
-            >Taiwan Market</router-link
-          >
-          <router-link class="dropdown-item" to="/markets/usaMarket"
-            >US Markets</router-link
-          >
-          <router-link class="dropdown-item" to="/markets/cryptoMarket"
-            >Crypto Markets</router-link
-          >
+          <router-link class="dropdown-item" v-for="market in marketLists"
+            :key="market.name"
+            :to="market.link"
+          >{{ market.name }}</router-link>
         </div>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
@@ -151,6 +140,25 @@ const alerts = [
     title: "2 new price alerts",
     time: "Yesterday",
   }
+]
+
+const marketLists = [
+  {
+    link: "/markets/allMarkets",
+    name: "All Markets",
+  },
+  {
+    link: "/markets/taiwanMarket",
+    name: "Taiwan Market",
+  },
+  {
+    link: "/markets/usaMarket",
+    name: "US Markets",
+  },
+  {
+    link: "/markets/cryptoMarket",
+    name: "Crypto Markets",
+  },
 ]
 
 function toggleSidebar() {

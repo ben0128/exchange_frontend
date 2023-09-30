@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 // import store from "./store/index.js";
 import NotFound from "./pages/NotFound.vue";
 const allMarkets = () => import("./pages/Markets/allMarkets.vue");
-const userAccount = () => import("./pages/User/userAccount.vue");
+const virtualAccount = () => import("./pages/User/virtualAccount.vue");
+const realAccount = () => import("./pages/User/realAccount.vue");
 const cryptoMarket = () => import("./pages/Markets/cryptoMarket.vue");
 const usaMarket = () => import("./pages/Markets/usaMarket.vue");
 const taiwanMarket = () => import("./pages/Markets/taiwanMarket.vue");
@@ -46,11 +47,11 @@ const router = createRouter({
       children: [
         {
           path: "realAccount",
-          component: userAccount,
+          component: realAccount,
         },
         {
           path: "virtualAccount",
-          component: userAccount,
+          component: virtualAccount,
         },
         {
           path: "tradingJournals",

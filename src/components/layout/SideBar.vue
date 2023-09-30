@@ -44,34 +44,10 @@
               </li>
             </div>
           </div>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="/user/tradingJournals/allJournals" class="nav-link"
-              ><i class="fa-solid fa-book"></i>Trading Journal</a
-            >
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="/user/favoriteAssets" class="nav-link"
-              ><i class="fa-solid fa-heart"></i>Favorite Assets</a
-            >
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="/user/userSetting" class="nav-link"
-              ><i class="fa-solid fa-gear"></i>Settings</a
-            >
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a
-              href="https://ben0128.github.io/cv_and_sideprojects/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="nav-link"
-              ><span class="fas fa-envelope"></span>Contact Me!!</a
-            >
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link" @click="logout"
-              ><i class="fas fa-sign-out-alt"></i>Logout</a
-            >
+          <li class="nav-item d-none d-sm-inline-block" v-for="item in sideItems" :key="item.id">
+            <a :href="item.href" class="nav-link" :target=" item.id === 4 ? '_blank' : ''" :rel=" item.id === 4 ? 'noopener noreferrer' : ''" @click="handleClick(item.id)">
+              <i :class="item.icon"></i>{{ item.text }}
+            </a>
           </li>
         </ul>
       </nav>
@@ -89,6 +65,46 @@ const store = useStore();
 const logout = () => {
   store.commit("clearToken");
 };
+
+const sideItems = [
+  {
+    id: 1,
+    href: "/user/tradingJournals/allJournals",
+    icon: "fa-solid fa-book",
+    text: "Trading Journal",
+  },
+  {
+    id: 2,
+    href: "/user/favoriteAssets",
+    icon: "fa-solid fa-heart",
+    text: "Favorite Assets",
+  },
+  {
+    id: 3,
+    href: "/user/userSetting",
+    icon: "fa-solid fa-gear",
+    text: "Settings",
+  },
+  {
+    id: 4,
+    href: "https://ben0128.github.io/cv_and_sideprojects/",
+    icon: "fas fa-envelope",
+    text: "Contact Me!!",
+  },
+  {
+    id: 5,
+    href: "#",
+    icon: "fas fa-sign-out-alt",
+    text: "Logout",
+  }
+
+]
+
+const handleClick = (id) => {
+  if (id === 5) {
+    logout();
+  }
+}
 </script>
 
 <style scoped>
