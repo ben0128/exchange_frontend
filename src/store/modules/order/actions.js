@@ -124,5 +124,46 @@ export default {
       console.error(error);
       return { success: false };
     }
+  },
+  async countCompletedOrderValue(context) {
+    const completedOrders = context.getters.getCompletedOrders;
+    const orderList = [];
+    completedOrders.forEach((order) => {
+      if (order.type === "buy") {
+        const index = orderList.findIndex(
+          (stock) => stock.targetName === order.targetName
+        );
+        if (index === -1) {
+          orderList.push({
+            targetName: order.targetName,
+            totalShares: order.shares,
+          });
+        } else {
+          orderList[index].totalShares += order.shares;
+        }
+      } else {
+        const index = orderList.findIndex(
+          (stock) => stock.targetName === order.targetName
+        );
+        if (index === -1) {
+          orderList.push({
+            targetName: order.targetName,
+            totalShares: -order.shares,
+          });
+        } else {
+          orderList[index].totalShares -= order.shares;
+        }
+      }
+    });
+    let totalValue = 0;
+    for (const stock of orderList) {
+      const targetPrice = await context.dispatch("target/getTargetPrice", {
+        target: stock.targetName,
+        mode: "completedOrder",
+      }, { root: true });
+      totalValue += targetPrice.latestPrice * stock.totalShares;
+    }
+    context.commit("setCompletedOrdersValue", totalValue);
+    return { success: true };
   }
 };

@@ -5,4 +5,4 @@ export default {
   clearTargetPrice(state) {
     state.targetPrice = 0;
   },
-}
+};

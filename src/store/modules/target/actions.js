@@ -11,6 +11,9 @@ export default {
       const latestPrice = timeSeriesData[latestTimestamp]["1. open"];
       //將價格存入state
       // console.log(latestPrice)
+      if (payload.mode === "completedOrder") {
+        return { success: true, latestPrice };
+      }
       context.commit("setTargetPrice", { latestPrice });
       return { success: true };
     } catch (error) {

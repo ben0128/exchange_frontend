@@ -186,7 +186,7 @@ async function submitForm() {
     price.value = 0;
     alert("交易成功");
   } else {
-    alert("交易失敗");
+    alert("不得賣超過現有股數，或是價格無法取得");
   }
 }
 

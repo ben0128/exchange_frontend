@@ -71,11 +71,6 @@
         <div class="social-auth-links text-center">
           <p>- OR -</p>
           <div class="auth-way">
-            <div id="fb-root">
-              <button class="btn btn-primary" @click="logInWithFacebook">
-                <i class="fab fa-facebook mr-2"></i>FB
-              </button>
-            </div>
             <GoogleLogin :callback="callback"/>
           </div>
         </div>
@@ -121,50 +116,6 @@ const callback = async (googleUser) => {
     alert("登入失敗");
   }
 };
-
-async function logInWithFacebook() {
-  window.FB.login(function (response) {
-    console.log(response);
-    if (response.authResponse) {
-      alert("You are logged in &amp; cookie set!");
-      // Now you can redirect the user or do an AJAX request to
-      // a PHP script that grabs the signed request from the cookie.
-    } else {
-      alert("User cancelled login or did not fully authorize.");
-    }
-  });
-  return false;
-}
-
-async function initFacebook() {
-  return new Promise((resolve) => {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: "7254607447886024",
-        cookie: true, // enable cookies to allow the server to access
-        xfbml: true, // parse social plugins on this page
-        version: "v18.0",
-      });
-      resolve();
-    };
-  });
-}
-
-async function loadFacebookSDK(d, s, id) {
-  return new Promise((resolve, reject) => {
-    let js,
-      fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-      return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-    js.onload = resolve;
-    js.onerror = reject;
-  });
-}
 
 function changeShow(bool) {
   show.value = bool;
@@ -249,9 +200,6 @@ onMounted(async () => {
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center center";
-
-  await loadFacebookSDK(document, "script", "facebook-jssdk");
-  await initFacebook();
 });
 
 onBeforeUnmount(() => {

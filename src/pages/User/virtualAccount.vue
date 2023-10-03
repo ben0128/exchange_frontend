@@ -21,32 +21,29 @@ const store = useStore();
 const myChart = ref(null);
 const cash = ref(0);
 const unfilledValue = ref(0);
-const assetValue = ref(0);
+const completedOrdersValue = ref(0);
 const totalValue = ref(0);
 
 onMounted(async () => {
+  //獲取用戶餘額
   await store.dispatch("getUser");
   cash.value = store.getters.getAccount;
+
+  //獲取用戶訂單，並將已完成和未完成的訂單分開
   await store.dispatch("order/getAllOrders");
   const unFilledOrders = store.getters["order/getPendingOrders"];
-  const completedOrders = store.getters["order/getCompletedOrders"];
-  // const targetList = []
-  console.log(unFilledOrders)
+
+  await store.dispatch("order/countCompletedOrderValue");
+  //未完成訂單總淨值
   unFilledOrders.forEach((order) => {
-    // const target = targetList.some((target) => target === order.targetName)
     if (order.type === "buy") {
       unfilledValue.value += order.shares * order.price;
     }
   });
-  completedOrders.forEach((order) => {
-    if (order.type === "buy") {
-      assetValue.value += order.shares * order.price;
-    }
-    if (order.type === "sell") {
-      assetValue.value -= order.shares * order.price;
-    }
-  });
-  totalValue.value = cash.value + unfilledValue.value + assetValue.value;
+  //計算已完成訂單的總值(手頭股票淨值)
+  completedOrdersValue.value = store.getters["order/getCompletedOrdersValue"]
+  
+  totalValue.value = cash.value + unfilledValue.value + completedOrdersValue.value;
   const ctx = myChart.value.getContext("2d");
   new Chart(ctx, {
     type: "doughnut",
@@ -54,7 +51,7 @@ onMounted(async () => {
       labels: ["Available Balance", "Unfilled Buy Orders", "Stock"],
       datasets: [
         {
-          data: [cash.value.toFixed(1), unfilledValue.value.toFixed(1), assetValue.value.toFixed(1)],
+          data: [cash.value.toFixed(1), unfilledValue.value.toFixed(1), completedOrdersValue.value.toFixed(1)],
           backgroundColor: [
             "rgb(255, 99, 132)",
             "rgb(54, 162, 235)",

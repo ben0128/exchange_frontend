@@ -7,6 +7,7 @@ const orderModule = {
   state: {
     pendingOrders: [],
     completedOrders: [],
+    completedOrdersValue: 0,
   },
   getters: orderGetters,
   mutations: orderMutations,

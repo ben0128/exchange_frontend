@@ -7,7 +7,7 @@ const targetModule = {
   state: {
     target: null,
     targets: [],
-    targetPrice: 0,
+    targetPrice: 0
   },
   getters: targetGetters,
   mutations: targetMutations,
