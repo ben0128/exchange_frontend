@@ -71,7 +71,7 @@
         <div class="social-auth-links text-center">
           <p>- OR -</p>
           <div class="auth-way">
-            <GoogleLogin :callback="callback"/>
+            <GoogleLogin :callback="callback" />
           </div>
         </div>
         <div v-if="!checkMode">
@@ -132,43 +132,45 @@ async function submitForm() {
   if (password.value.length < 6) {
     return alert("密碼長度不足6碼");
   }
-  if (mode.value === "Login") {
-    isLoading.value = true;
-    const res = await store.dispatch("login", {
-      email: email.value,
-      password: password.value,
-      rememberMe: rememberMe.value,
-    });
+  try {
+    if (mode.value === "Login") {
+      isLoading.value = true;
+      const res = await store.dispatch("login", {
+        email: email.value,
+        password: password.value,
+        rememberMe: rememberMe.value,
+      });
 
-    if (res.success) {
-      isLoading.value = false;
-      router.push("/");
-    } else {
-      isLoading.value = false;
-      alert("帳號或密碼錯誤");
+      if (res.success) {
+        router.push("/");
+      } else {
+        alert("帳號或密碼錯誤");
+      }
+    } else if (mode.value === "Register") {
+      if (password.value !== checkPassword.value) {
+        return alert("密碼不一致");
+      }
+      // checkbox要打勾
+      if (rememberMe.value === false && mode.value === "Register") {
+        return alert("請勾選同意條款");
+      }
+      isLoading.value = true;
+      const res = await store.dispatch("signup", {
+        email: email.value,
+        password: password.value,
+        checkPassword: checkPassword.value,
+      });
+      if (res.success) {
+        alert("註冊成功");
+        changeMode();
+      } else {
+        alert("此信箱已註冊！");
+      }
     }
-  } else if (mode.value === "Register") {
-    if (password.value !== checkPassword.value) {
-      return alert("密碼不一致");
-    }
-    // checkbox要打勾
-    if (rememberMe.value === false && mode.value === "Register") {
-      return alert("請勾選同意條款");
-    }
-    isLoading.value = true;
-    const res = await store.dispatch("signup", {
-      email: email.value,
-      password: password.value,
-      checkPassword: checkPassword.value,
-    });
-    if (res.success) {
-      isLoading.value = false;
-      alert("註冊成功");
-      changeMode();
-    } else {
-      isLoading.value = false;
-      alert("此信箱已註冊！");
-    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    isLoading.value = false;
   }
 }
 
@@ -250,5 +252,4 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-around;
 }
-
 </style>

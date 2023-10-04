@@ -10,6 +10,7 @@ export default {
           password: payload.password,
         }
       );
+      console.log(res)
       if (res.status === 400) {
         throw new Error(res.data.message);
       }

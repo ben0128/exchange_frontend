@@ -85,7 +85,6 @@ async function searchStock(keyword) {
     target.value = "";
     searchQuery.value = "";
   }
-  console.log(isLiked.value)
 }
 
 async function changeLike() {

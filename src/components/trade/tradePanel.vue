@@ -162,28 +162,26 @@ async function changeActiveTradeButton(button) {
 }
 
 async function submitForm() {
-  let res = null;
-  if (activeTradeButton.value === "market") {
-    // console.log(shares)
-    res = await store.dispatch("order/addMarketOrder", {
-      targetName: props.target,
-      type: activeOrderType.value,
-      shares: shares.value,
-    });
-  } else {
-    res = await store.dispatch("order/addLimitOrder", {
-      targetName: props.target,
-      type: activeOrderType.value,
-      shares: shares.value,
-      price: price.value,
-    });
+  // 創建一個通用的 payload 對象
+  const payload = {
+    targetName: props.target,
+    type: activeOrderType.value,
+    shares: shares.value,
+    orderType: activeTradeButton.value,  // 添加 orderType 屬性
+  };
+
+  // 如果是限價訂單，添加 price 屬性
+  if (activeTradeButton.value === "limit") {
+    payload.price = price.value;
   }
+
+  // 調用新的 addOrder 函數
+  const res = await store.dispatch("order/addOrder", payload);
   console.log(res)
   if (res.success) {
     shares.value = 0;
     totalValue.value = 0;
     sliderValue.value = 0;
-    price.value = 0;
     alert("交易成功");
   } else {
     alert("不得賣超過現有股數，或是價格無法取得");

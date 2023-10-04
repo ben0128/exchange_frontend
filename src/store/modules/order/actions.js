@@ -2,41 +2,14 @@ const axios = require("axios");
 import formatDate from "../../../../utills/formatDate";
 
 export default {
-  async addMarketOrder(_, payload) {
+  async addOrder(_, payload) {
     try {
-      console.log(payload)
+      const endpoint = payload.orderType === "market"
+        ? "/api/orders/marketOrder"
+        : "/api/orders/limitOrder";
+
       const res = await axios.post(
-        "https://exchange-backend-kt8e.onrender.com/api/orders/marketOrder",
-        {
-          targetName: payload.targetName,
-          type: payload.type,
-          shares: payload.shares,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${
-              localStorage.getItem("token") || sessionStorage.getItem("token")
-            }`,
-          },
-        }
-      );
-      console.log(res);
-      if (res.status === 400) {
-        return { success: false };
-      }
-      if (res.status === 201) {
-        return { success: true };
-      }
-    } catch (error) {
-      console.error(error);
-      return { success: false };
-    }
-  },
-  async addLimitOrder(_, payload) {
-    try {
-      // console.log(payload)
-      const res = await axios.post(
-        "https://exchange-backend-kt8e.onrender.com/api/orders/limitOrder",
+        `https://exchange-backend-kt8e.onrender.com${endpoint}`,
         {
           targetName: payload.targetName,
           type: payload.type,
@@ -51,10 +24,11 @@ export default {
           },
         }
       );
-      console.log(res)
+
       if (res.status === 400) {
         throw new Error(res.data.message);
       }
+
       if (res.status === 201) {
         return { success: true };
       }
