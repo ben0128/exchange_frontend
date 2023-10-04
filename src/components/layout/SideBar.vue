@@ -87,7 +87,7 @@ const sideItems = [
   },
   {
     id: 4,
-    href: "https://ben0128.github.io/cv_and_sideprojects/",
+    href: "https://drive.google.com/file/d/1bJ9YflTXY-zIoifeSaJOUHkB27RcNe_m/view",
     icon: "fas fa-envelope",
     text: "Contact Me!!",
   },
