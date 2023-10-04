@@ -43,7 +43,7 @@ onMounted(async () => {
   //計算已完成訂單的總值(手頭股票淨值)
   completedOrdersValue.value = store.getters["order/getCompletedOrdersValue"]
   
-  totalValue.value = cash.value + unfilledValue.value + completedOrdersValue.value;
+  totalValue.value = (cash.value + unfilledValue.value + completedOrdersValue.value).toFixed(1);
   const ctx = myChart.value.getContext("2d");
   new Chart(ctx, {
     type: "doughnut",
