@@ -8,7 +8,7 @@
 - [前端 Github (exchange_frontend)](https://github.com/ben0128/exchange_frontend)
 - [後端 Github (exchange_backend)](https://github.com/ben0128/exchange_backend)
 - [爬蟲 Github (exchange_webhook)](https://github.com/ben0128/exchange_webhook)
-- [爬蟲 GoogleColab](https://colab.research.google.com/drive/1cfoT5yzU5TuJWoFqGBXCzgMgZubXIN8g?usp=sharing)
+- [爬蟲 GoogleColab](https://colab.research.google.com/drive/17FRMISQP6yoO30lUh37KHygg6OfTRg3k?hl=zh-tw#scrollTo=jHpwx_5cW_SB)
 
 ### Download Project
 
