@@ -83,14 +83,28 @@ onMounted(async () => {
   width: 30rem;
   height: 30rem;
   border-radius: 5%;
+  margin: 6rem auto auto 2rem;
 }
 
 .assets-percent {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
+  margin: auto auto;
 }
 
 canvas {
   margin: 0 auto;
 }
+
+.card-title {
+  margin: 0 auto;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-header {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
 </style>
